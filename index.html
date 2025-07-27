@@ -1,0 +1,560 @@
+<html>
+    <title>Dealership Watch</title>
+    <head>
+        <style>
+            :root {
+                --bg-color: white;
+                --text-color: #333;
+                --item-bg: #f8f8f8;
+                --item-hover: #f0f0f0;
+                --border-color: #e0e0e0;
+                --result-bg: white;
+            }
+
+            .search-area {
+                transition: max-height 0.3s ease-out, opacity 0.3s ease-out, margin 0.3s ease-out;
+                max-height: 500px;
+                opacity: 1;
+                overflow: hidden;
+            }
+
+            .search-area.minimized {
+                max-height: 0;
+                opacity: 0;
+                margin: 0;
+                padding: 0;
+            }
+
+            [data-theme="dark"] {
+                --bg-color: #2d2d2d;
+                --text-color: #e0e0e0;
+                --item-bg: #3d3d3d;
+                --item-hover: #4d4d4d;
+                --border-color: #404040;
+                --result-bg: #2d2d2d;
+            }
+
+            .theme-buttons {
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                display: flex;
+                gap: 5px;
+            }
+
+            .theme-btn {
+                padding: 5px 10px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                background: var(--item-bg);
+                color: var(--text-color);
+                transition: background-color 0.2s;
+            }
+
+            .theme-btn:hover {
+                background: var(--item-hover);
+            }
+
+            .search-container {
+                margin-bottom: 15px;
+                display: flex;
+                gap: 8px;
+            }
+            .search-container input {
+                flex: 1;
+                padding: 8px;
+                border: 1px solid var(--border-color);
+                border-radius: 4px;
+                font-family: Arial, sans-serif;
+                background-color: var(--item-bg);
+                color: var(--text-color);
+            }
+            .search-container button {
+                padding: 8px 16px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-family: Arial, sans-serif;
+            }
+            .search-container button:hover {
+                background-color: #45a049;
+            }
+            .result {
+                margin: 10px 0;
+                padding: 10px;
+                border: 1px solid var(--border-color);
+                border-radius: 5px;
+                text-align: left;
+                display: none;
+                background-color: var(--bg-color);
+                color: var(--text-color);
+            }
+            .result button {
+                margin-top: 10px;
+                padding: 6px 12px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+            .result button:hover {
+                background-color: #45a049;
+            }
+            .watch-section {
+                margin-top: 8px;
+                padding-top: 8px;
+            }
+            .watchlist {
+                margin-top: 20px;
+                padding: 15px;
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                text-align: left;
+                position: fixed;
+                background-color: var(--bg-color);
+                cursor: move;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                font-family: Arial, sans-serif;
+                min-width: 250px;
+                transition: background-color 0.3s, border-color 0.3s;
+            }
+            .watchlist h3 {
+                margin: 0 0 15px 0;
+                color: var(--text-color);
+                font-size: 16px;
+                padding-bottom: 8px;
+            }
+            .watch-item {
+                margin: 8px 0;
+                padding: 10px 12px;
+                background-color: var(--item-bg);
+                border-radius: 6px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                border: 1px solid var(--border-color);
+                transition: all 0.2s;
+            }
+            .watch-item:hover {
+                background-color: var(--item-hover);
+            }
+            .watch-item p {
+                margin: 0;
+                font-size: 14px;
+                color: var(--text-color);
+                transition: color 0.3s;
+            }
+            .remove-btn {
+                float: right;
+                color: #ff4444;
+                cursor: pointer;
+                font-size: 18px;
+                margin-left: 8px;
+                opacity: 0.7;
+                transition: opacity 0.2s;
+            }
+            .remove-btn:hover {
+                opacity: 1;
+            }
+            .notification {
+                position: absolute;
+                bottom: -60px;
+                left: 0;
+                right: 0;
+                background-color: #4CAF50;
+                color: white;
+                padding: 12px 24px;
+                border-radius: 8px;
+                z-index: 1000;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+                text-align: center;
+                opacity: 0;
+                pointer-events: none;
+                transform: scale(0.95);
+                transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+            }
+            .notification.show {
+                opacity: 1;
+                transform: scale(1);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="watchlist">
+            <div id="notification" class="notification"></div>
+            <div class="theme-buttons">
+                <button onclick="setTheme('light')" class="theme-btn">☀️</button>
+                <button onclick="setTheme('dark')" class="theme-btn">🌙</button>
+                <button onclick="toggleSearch()" class="theme-btn" id="toggleBtn">🔍</button>
+            </div>
+            <div class="search-area" id="searchArea">
+                <h3>Vehicle Search</h3>
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Enter vehicle name...">
+                    <button onclick="searchCar()">Search</button>
+                </div>
+                <div id="result" class="result"></div>
+            </div>
+            <div class="watch-section">
+                <h3>Watched vehicles:</h3>
+                <div id="watchedItems"></div>
+            </div>
+        </div>
+
+        <script>
+            // API function to fetch dealership data
+            async function fetchDealershipData() {
+                const response = await fetch('/api/dealership');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            }
+
+            // Theme functionality
+            function setTheme(theme) {
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+            }
+
+            // Toggle search section
+            function toggleSearch() {
+                const searchArea = document.getElementById('searchArea');
+                const toggleBtn = document.getElementById('toggleBtn');
+                const isMinimized = searchArea.classList.toggle('minimized');
+                toggleBtn.textContent = isMinimized ? '➕' : '➖';
+                
+                // Save state to localStorage
+                localStorage.setItem('searchMinimized', isMinimized);
+            }
+
+            // Load search section state
+            const searchMinimized = localStorage.getItem('searchMinimized') === 'true';
+            if (searchMinimized) {
+                document.getElementById('searchArea').classList.add('minimized');
+                document.getElementById('toggleBtn').textContent = '➕';
+            } else {
+                document.getElementById('toggleBtn').textContent = '➖';
+            }
+
+            // Load saved theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                setTheme(savedTheme);
+            }
+
+            // Store watched cars
+            let watchedCars = [];
+            
+            // Audio for notifications
+            const audio = new Audio('notif.wav');
+
+            // Store matched cars
+            let matchedCars = new Set();
+
+            // API rate limiting
+            let apiCallsToday = parseInt(localStorage.getItem('apiCallsToday')) || 0;
+            let lastApiCallDate = localStorage.getItem('lastApiCallDate') || null;
+
+            // Function to check if API call is allowed
+            function canCallApi() {
+                const now = new Date();
+                const today = now.toDateString();
+                
+                // Reset counter if it's a new day
+                if (lastApiCallDate !== today) {
+                    apiCallsToday = 0;
+                    lastApiCallDate = today;
+                    localStorage.setItem('apiCallsToday', apiCallsToday);
+                    localStorage.setItem('lastApiCallDate', lastApiCallDate);
+                    return true;
+                }
+
+                // Check if under limit
+                if (apiCallsToday < 10) {
+                    return true;
+                }
+
+                return false;
+            }
+
+            // Function to increment API call counter
+            function incrementApiCalls() {
+                const today = new Date().toDateString();
+                apiCallsToday++;
+                lastApiCallDate = today;
+                localStorage.setItem('apiCallsToday', apiCallsToday);
+                localStorage.setItem('lastApiCallDate', lastApiCallDate);
+            }
+
+            // Function to show API limit error
+            function showApiLimitError() {
+                const notification = document.getElementById('notification');
+                notification.textContent = "Limit of 10 api calls per day, please try in 24h or wait for the next day";
+                notification.style.backgroundColor = '#ff4444';
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    notification.style.backgroundColor = '#4CAF50';
+                }, 5000);
+            }
+
+            // Show notification
+            function showNotification(message) {
+                const notification = document.getElementById('notification');
+                notification.textContent = message;
+                notification.classList.add('show');
+                
+                // Hide notification after 3 seconds
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+
+            // Load watchlist from localStorage when page loads
+            function loadWatchlist() {
+                const saved = localStorage.getItem('watchedCars');
+                if (saved) {
+                    watchedCars = JSON.parse(saved);
+                    updateWatchlist();
+                }
+            }
+
+            // Save watchlist to localStorage
+            function saveWatchlist() {
+                localStorage.setItem('watchedCars', JSON.stringify(watchedCars));
+            }
+
+            // Load watchlist when page loads
+            loadWatchlist();
+
+            // Drag functionality
+            const watchlist = document.querySelector('.watchlist');
+            let isDragging = false;
+            let currentX;
+            let currentY;
+            let initialX;
+            let initialY;
+            let xOffset = 0;
+            let yOffset = 0;
+
+            // Try to load position from localStorage
+            const savedPosition = localStorage.getItem('watchlistPosition');
+            if (savedPosition) {
+                const { x, y } = JSON.parse(savedPosition);
+                xOffset = x;
+                yOffset = y;
+                watchlist.style.transform = `translate(${x}px, ${y}px)`;
+            }
+
+            watchlist.addEventListener('mousedown', dragStart);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', dragEnd);
+
+            function dragStart(e) {
+                initialX = e.clientX - xOffset;
+                initialY = e.clientY - yOffset;
+
+                if (e.target === watchlist || e.target.closest('.watchlist')) {
+                    isDragging = true;
+                }
+            }
+
+            function drag(e) {
+                if (isDragging) {
+                    e.preventDefault();
+                    currentX = e.clientX - initialX;
+                    currentY = e.clientY - initialY;
+                    xOffset = currentX;
+                    yOffset = currentY;
+                    watchlist.style.transform = `translate(${currentX}px, ${currentY}px)`;
+                }
+            }
+
+            function dragEnd(e) {
+                initialX = currentX;
+                initialY = currentY;
+                isDragging = false;
+                
+                // Save position to localStorage
+                localStorage.setItem('watchlistPosition', JSON.stringify({ x: xOffset, y: yOffset }));
+            }
+
+            async function checkWatchedCars(showError = false) {
+                if (watchedCars.length === 0) return;
+
+                if (!canCallApi()) {
+                    if (showError) {
+                        showApiLimitError();
+                    }
+                    return;
+                }
+
+                try {
+                    const data = await fetchDealershipData();
+                    incrementApiCalls();
+                    
+                    // Clear previous matches
+                    matchedCars.clear();
+
+                    // Check each watched car
+                    watchedCars.forEach(watchedCar => {
+                        for (const category in data) {
+                            const car = data[category]?.find(c => c.model === watchedCar.model);
+                            if (car) {
+                                // If the car is found in the API, play the sound and show notification
+                                audio.volume = 0.2; // Set volume to 20%
+                                audio.play();
+                                showNotification(`Watched vehicles on the dealership!`);
+                                console.info(`Vehicle found: ${car.name} (${car.model})`);
+                                matchedCars.add(car.model); // Add to matched cars
+                                break; // Exit the category loop once we find a match
+                            }
+                        }
+                    });
+                    
+                    // Update the watchlist to reflect the new matches
+                    updateWatchlist();
+                    
+                } catch (error) {
+                    console.error('Error checking watched cars:', error);
+                }
+            }
+
+            // Start checking every 24h - don't show errors on auto-check
+            setInterval(() => checkWatchedCars(false), 86400000);
+            
+            // Clear search results and input
+            function clearSearch() {
+                document.getElementById('searchInput').value = '';
+                document.getElementById('result').style.display = 'none';
+            }
+
+            function addToWatchlist(carData, category) {
+                // Check if car is already in watchlist
+                if (!watchedCars.some(car => car.model === carData.model)) {
+                    watchedCars.push({...carData, category});
+                    saveWatchlist(); // Save to localStorage
+                    
+                    // Clear search input and results
+                    document.getElementById('searchInput').value = '';
+                    document.getElementById('result').style.display = 'none';
+                    
+                    // Immediately check all cars against the API - show errors on manual action
+                    checkWatchedCars(true);
+                }
+            }
+
+            function removeFromWatchlist(model) {
+                watchedCars = watchedCars.filter(car => car.model !== model);
+                updateWatchlist();
+                saveWatchlist(); // Save to localStorage
+            }
+
+            function updateWatchlist() {
+                const watchlistDiv = document.getElementById('watchedItems');
+                watchlistDiv.innerHTML = watchedCars.map(car => {
+                    // Only add colors if the car has been checked (is in matchedCars or has been confirmed as not matched)
+                    const hasBeenChecked = matchedCars.size > 0;
+                    const style = hasBeenChecked ? 
+                        `background-color: ${matchedCars.has(car.model) ? 'rgba(76, 175, 80, 0.1)' : 'rgba(255, 68, 68, 0.05)'}; border-color: ${matchedCars.has(car.model) ? '#4CAF50' : '#ff4444'};` : 
+                        '';
+                    
+                    return `
+                    <div class="watch-item" style="${style}">
+                        <span class="remove-btn" onclick="removeFromWatchlist('${car.model}')">&times;</span>
+                        <p>${car.name}</p>
+                    </div>
+                    `;
+                }).join('');
+            }
+
+            async function searchCar() {
+                const searchInput = document.getElementById('searchInput');
+                const searchTerm = searchInput.value.toLowerCase();
+                const resultDiv = document.getElementById('result');
+                resultDiv.style.display = 'none';
+                
+                if (!searchTerm) {
+                    searchInput.style.borderColor = '#ff4444';
+                    setTimeout(() => {
+                        searchInput.style.borderColor = ''; // Reset to CSS variable after 1 second
+                    }, 1000);
+                    return;
+                }
+
+                if (!canCallApi()) {
+                    showApiLimitError();
+                    return;
+                }
+
+                try {
+                    const data = await fetchDealershipData();
+                    incrementApiCalls();
+                    
+                    let matches = [];
+                    for (const category in data) {
+                        const cars = data[category];
+                        const matchedCars = cars.filter(car => 
+                            car.name.toLowerCase().includes(searchTerm) || 
+                            car.model.toLowerCase().includes(searchTerm)
+                        );
+                        
+                        matchedCars.forEach(car => {
+                            matches.push({ ...car, category });
+                        });
+                    }
+                    
+                    resultDiv.style.display = 'block';
+                    
+                    if (matches.length > 0) {
+                        if (matches.length === 1) {
+                            // Show all details for single match
+                            const car = matches[0];
+                            resultDiv.innerHTML = `
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                    <h3 style="margin: 0;">Found 1 match:</h3>
+                                    <button onclick="clearSearch()" style="padding: 4px 8px; background: var(--item-bg); border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer; color: var(--text-color);">Clear</button>
+                                </div>
+                                <div class="search-result-item" style="margin-bottom: 15px; padding: 10px; border: 1px solid var(--border-color); border-radius: 4px;">
+                                    <p><strong>Name:</strong> ${car.name}</p>
+                                    <p><strong>Model:</strong> ${car.model}</p>
+                                    <p><strong>Category:</strong> ${car.category}</p>
+                                    <p><strong>Price:</strong> $${car.price.toLocaleString()}</p>
+                                    <p><strong>Days Left:</strong> ${car.days_left}</p>
+                                    <button onclick='addToWatchlist(${JSON.stringify(car)}, "${car.category}")'>Watch</button>
+                                </div>
+                            `;
+                        } else {
+                            // Show only names for multiple matches
+                            resultDiv.innerHTML = `
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                    <h3 style="margin: 0;">Found ${matches.length} matches:</h3>
+                                    <button onclick="clearSearch()" style="padding: 4px 8px; background: var(--item-bg); border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer; color: var(--text-color);">Clear</button>
+                                </div>
+                                ${matches.map(car => `
+                                    <div class="search-result-item" style="margin-bottom: 8px; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; display: flex; justify-content: space-between; align-items: center;">
+                                        <span>${car.name}</span>
+                                        <button onclick='addToWatchlist(${JSON.stringify(car)}, "${car.category}")' style="margin: 0;">Watch</button>
+                                    </div>
+                                `).join('')}
+                            `;
+                        }
+                    } else {
+                        resultDiv.innerHTML = '<p>No matching vehicle found</p>';
+                    }
+                    
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                    resultDiv.style.display = 'block';
+                    resultDiv.innerHTML = '<p>Error searching for vehicle</p>';
+                }
+            }
+        </script>
+    </body>
+</html>
