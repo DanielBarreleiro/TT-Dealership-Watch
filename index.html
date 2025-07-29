@@ -563,10 +563,10 @@
             let originalVehicleData = {};
 
             // Vehicle modal functionality
-            async function loadVehicleClasses() {
+            function loadVehicleClasses() {
                 try {
-                    const response = await fetch('vehicles.json');
-                    const vehicles = await response.json();
+                    const response = fetch('vehicles.json');
+                    const vehicles = response.json();
                     originalVehicleData = vehicles; // Store original data
                     displayVehicleClasses(vehicles);
                 } catch (error) {
