@@ -972,6 +972,8 @@
                     // Optionally check against API immediately
                     checkWatchedCars(false);
                 }
+                // Update floating button color
+                updateFloatingButtonColor();
             }
 
             // Function to handle adding vehicles from search (vehicles.json)
@@ -1217,6 +1219,7 @@
                         button.disabled = false;
                     }
                 });
+                // Update floating button color
                 updateFloatingButtonColor();
             }
 
