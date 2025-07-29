@@ -520,7 +520,6 @@
         <button id="floatingBtn" class="floating-btn no-matches" onclick="openAllWindows()">Dealership Watch</button>
 
         <script>
-
             async function highlightAvailableVehiclesInModal() {
                 try {
                     const data = await fetchDealershipData();
@@ -1327,6 +1326,7 @@
                     resultDiv.innerHTML = '<p>Error searching for vehicle</p>';
                 }
             }
+            checkWatchedCars();
         </script>
     </body>
 </html>
