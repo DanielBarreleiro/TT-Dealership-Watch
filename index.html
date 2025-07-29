@@ -42,6 +42,98 @@
                 gap: 5px;
             }
 
+            .close-btn {
+                position: absolute;
+                top: 15px;
+                left: 15px;
+                padding: 5px 10px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                background-color: #ff4444;
+                color: white;
+                transition: all 0.2s;
+                font-size: 12px;
+                font-weight: bold;
+                width: 25px;
+                height: 25px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .close-btn:hover {
+                opacity: 0.8;
+                transform: scale(1.05);
+            }
+
+            .minimize-btn {
+                position: absolute;
+                top: 15px;
+                left: 45px;
+                padding: 5px 10px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                background: var(--item-bg);
+                color: var(--text-color);
+                transition: all 0.2s;
+                font-size: 12px;
+                font-weight: bold;
+                width: 25px;
+                height: 25px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .minimize-btn:hover {
+                background: var(--item-hover);
+                transform: scale(1.05);
+            }
+
+            /* Floating button at bottom right */
+            .floating-btn {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                padding: 12px 20px;
+                border: none;
+                border-radius: 25px;
+                cursor: pointer;
+                color: white;
+                font-weight: bold;
+                font-size: 14px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                transition: all 0.3s;
+                z-index: 1000;
+                display: none;
+            }
+
+            .floating-btn.no-matches {
+                background-color: #40404085; /* Semi-transparent gray */
+            }
+
+            .floating-btn.has-matches {
+                background-color: #4CAF50;
+            }
+
+            .floating-btn:hover {
+                transform: scale(1.1);
+                box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+            }
+
+            .watchlist.hidden {
+                display: none;
+            }
+
+            .watchlist.minimized {
+                padding: 10px 15px;
+                min-width: 200px;
+                width: 200px;
+                max-width: 200px;
+            }
+
             .theme-btn {
                 padding: 5px 10px;
                 border: none;
@@ -119,7 +211,9 @@
                 cursor: move;
                 box-shadow: 0 4px 12px rgba(0,0,0,0.15);
                 font-family: Arial, sans-serif;
-                min-width: 250px;
+                min-width: 320px; /* Increased from 250px */
+                max-width: 400px; /* Added max-width */
+                width: 350px; /* Set a default width */
                 transition: background-color 0.3s, border-color 0.3s;
             }
             .watchlist h3 {
@@ -128,9 +222,37 @@
                 font-size: 16px;
                 padding-bottom: 8px;
             }
+            
+            /* New styles for scrollable watched items container */
+            #watchedItems {
+                max-height: 280px; /* Height for approximately 4 items (4 * 70px) */
+                overflow-y: auto;
+                overflow-x: hidden;
+                padding-right: 5px; /* Space for scrollbar */
+            }
+            
+            /* Custom scrollbar styling */
+            #watchedItems::-webkit-scrollbar {
+                width: 6px;
+            }
+            
+            #watchedItems::-webkit-scrollbar-track {
+                background: var(--item-bg);
+                border-radius: 3px;
+            }
+            
+            #watchedItems::-webkit-scrollbar-thumb {
+                background: var(--border-color);
+                border-radius: 3px;
+            }
+            
+            #watchedItems::-webkit-scrollbar-thumb:hover {
+                background: #999;
+            }
+            
             .watch-item {
                 margin: 8px 0;
-                padding: 10px 12px;
+                padding: 1px 10px;
                 background-color: var(--item-bg);
                 border-radius: 6px;
                 white-space: nowrap;
@@ -138,6 +260,10 @@
                 text-overflow: ellipsis;
                 border: 1px solid var(--border-color);
                 transition: all 0.2s;
+                min-height: 45px; /* Ensure consistent height */
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
             }
             .watch-item:hover {
                 background-color: var(--item-hover);
@@ -147,15 +273,20 @@
                 font-size: 14px;
                 color: var(--text-color);
                 transition: color 0.3s;
+                flex: 1;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
             .remove-btn {
-                float: right;
                 color: #ff4444;
                 cursor: pointer;
                 font-size: 18px;
-                margin-left: 8px;
                 opacity: 0.7;
                 transition: opacity 0.2s;
+                flex-shrink: 0;
+                margin-left: 10px;
+                width: 20px;
+                text-align: center;
             }
             .remove-btn:hover {
                 opacity: 1;
@@ -181,31 +312,503 @@
                 opacity: 1;
                 transform: scale(1);
             }
+
+            /* Vehicle List Modal Styles */
+            .modal-overlay {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 1000;
+            }
+
+            .modal {
+                background: var(--bg-color);
+                border-radius: 8px;
+                padding: 20px;
+                width: 1000px !important; /* Smaller fixed width */
+                min-width: 1000px !important; /* Force minimum width */
+                max-width: 1000px !important; /* Force maximum width */
+                height: 70vh !important; /* Smaller fixed height */
+                min-height: 70vh !important; /* Force minimum height */
+                max-height: 70vh !important; /* Force maximum height */
+                overflow-x: hidden; /* Hide horizontal overflow */
+                overflow-y: auto;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                box-sizing: border-box;
+                display: flex;
+                flex-direction: column;
+                cursor: move; /* Show draggable cursor */
+                transition: background-color 0.3s, border-color 0.3s; /* Theme transition */
+                border: 1px solid var(--border-color); /* Add border for theme consistency */
+            }
+
+            .modal-search {
+                margin-bottom: 20px;
+                padding-bottom: 15px;
+                border-bottom: 1px solid var(--border-color);
+                flex-shrink: 0; /* Don't shrink */
+                height: 60px; /* Fixed height */
+                display: flex;
+                align-items: center;
+            }
+
+            .modal-search input {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid var(--border-color);
+                border-radius: 4px;
+                font-size: 16px;
+                background-color: var(--item-bg);
+                color: var(--text-color);
+                box-sizing: border-box;
+                height: 40px; /* Fixed height */
+            }
+
+            .modal-search input:focus {
+                outline: none;
+                border-color: #4CAF50;
+            }
+
+            .vehicle-class {
+                margin-bottom: 15px;
+                border: 1px solid var(--border-color);
+                border-radius: 4px;
+                overflow: hidden;
+                flex-shrink: 0; /* Don't compress vehicle classes */
+            }
+
+            .class-header {
+                padding: 10px;
+                background: var(--item-bg);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                cursor: pointer;
+            }
+
+            .class-header h3 {
+                margin: 0;
+                color: var(--text-color);
+            }
+
+            .class-content {
+                padding: 10px;
+                display: none;
+                grid-template-columns: repeat(4, minmax(0, 1fr)); /* Force equal width columns */
+                gap: 10px;
+                box-sizing: border-box;
+                width: 100%; /* Ensure it doesn't exceed container */
+                overflow: hidden; /* Hide any overflow */
+                min-height: 0; /* Allow shrinking */
+            }
+
+            .class-content.expanded {
+                display: grid;
+            }
+
+            .vehicle-item {
+                padding: 10px;
+                border: 1px solid var(--border-color);
+                border-radius: 4px;
+                background: var(--item-bg);
+                min-width: 0; /* Allow shrinking */
+                max-width: 100%; /* Don't exceed column width */
+                box-sizing: border-box;
+                overflow: hidden; /* Hide overflow */
+                position: relative; /* For button positioning */
+            }
+
+            .vehicle-item p {
+                margin: 5px 0;
+                color: var(--text-color);
+                word-wrap: break-word;
+                overflow-wrap: break-word; /* Additional text wrapping */
+                hyphens: auto; /* Allow hyphenation */
+                font-size: 14px; /* Ensure consistent font size */
+            }
+
+            .vehicle-watch-btn {
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                padding: 4px 8px;
+                font-size: 12px;
+                cursor: pointer;
+                margin-top: 8px;
+                width: 100%;
+                transition: background-color 0.2s;
+            }
+
+            .vehicle-watch-btn:hover {
+                background-color: #45a049;
+            }
+
+            .vehicle-watch-btn:disabled {
+                background-color: #cccccc;
+                cursor: not-allowed;
+            }
+
+            .modal-close {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background: none;
+                border: none;
+                color: var(--text-color);
+                font-size: 24px;
+                cursor: pointer;
+                padding: 5px;
+            }
+
+            .modal-close {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background: none;
+                border: none;
+                color: var(--text-color);
+                font-size: 24px;
+                cursor: pointer;
+                padding: 5px;
+                flex-shrink: 0; /* Don't shrink */
+            }
+
+            .modal-close:hover {
+                opacity: 0.8;
+            }
+
+            #vehicleClasses {
+                flex: 1;
+                overflow-y: auto;
+                overflow-x: hidden;
+                min-height: 0; /* Allow shrinking */
+            }
         </style>
     </head>
-    <body>
+    <body style="font-family: Arial, Helvetica, sans-serif;">
+        <div id="vehicleModal" class="modal-overlay">
+            <div class="modal">
+                <button class="modal-close" onclick="closeVehicleModal()">×</button>
+                <div class="modal-search" style="display: flex; gap: 10px; align-items: center;">
+                    <input type="text" id="vehicleSearchInput" placeholder="Search vehicles by name or model..." oninput="filterVehicles()" style="flex: 1;">
+                    <button onclick="clearVehicleModalSearch()" class="theme-btn">Clear</button>
+                </div>
+                <div id="vehicleClasses"></div>
+            </div>
+        </div>
         <div class="watchlist">
             <div id="notification" class="notification"></div>
+            <!--<button id="minimizeBtn" class="minimize-btn" onclick="minimizeWatchlist()">−</button>-->
             <div class="theme-buttons">
                 <button onclick="setTheme('light')" class="theme-btn">☀️</button>
                 <button onclick="setTheme('dark')" class="theme-btn">🌙</button>
-                <button onclick="toggleSearch()" class="theme-btn" id="toggleBtn">🔍</button>
+                <button onclick="toggleVehicleModal()" class="theme-btn" id="toggleBtn">➕</button>
+                <button id="closeBtn" class="theme-btn" onclick="closeAllWindows()">❌</button>
             </div>
-            <div class="search-area" id="searchArea">
-                <h3>Vehicle Search</h3>
-                <div class="search-container">
-                    <input type="text" id="searchInput" placeholder="Enter vehicle name...">
-                    <button onclick="searchCar()">Search</button>
-                </div>
-                <div id="result" class="result"></div>
-            </div>
-            <div class="watch-section">
+            <div id="watchContent" class="watch-section">
                 <h3>Watched vehicles:</h3>
                 <div id="watchedItems"></div>
             </div>
+            <div id="minimizedContent" style="display: none;">
+                <h3 style="margin: 0; text-align: center;">Dealership Watch</h3>
+            </div>
         </div>
 
+        <!-- Floating button that appears when everything is closed -->
+        <button id="floatingBtn" class="floating-btn no-matches" onclick="openAllWindows()">Dealership Watch</button>
+
         <script>
+
+            async function highlightAvailableVehiclesInModal() {
+                try {
+                    const data = await fetchDealershipData();
+
+                    // Loop over all visible vehicle items in the modal
+                    document.querySelectorAll('.vehicle-item').forEach(item => {
+                        const modelLine = Array.from(item.querySelectorAll('p')).find(p => p.textContent.startsWith('Model:'));
+                        if (!modelLine) return;
+
+                        const model = modelLine.textContent.replace('Model:', '').trim();
+
+                        // Check if the model exists in any category of the API data
+                        const isAvailable = Object.values(data).some(category =>
+                            category.some(car => car.model === model)
+                        );
+
+                        // Add green border if available
+                        if (isAvailable) {
+                            item.style.border = '2px solid #4CAF50';
+                        }
+                    });
+                } catch (err) {
+                    console.error('Error highlighting vehicles in modal:', err);
+                }
+            }
+
+            function clearVehicleModalSearch() {
+                const input = document.getElementById('vehicleSearchInput');
+                input.value = '';
+                displayVehicleClasses(originalVehicleData);
+
+                // Collapse all expanded dropdowns (optional)
+                setTimeout(() => {
+                    document.querySelectorAll('.class-content').forEach(content => content.classList.remove('expanded'));
+                    document.querySelectorAll('.class-header span').forEach(span => span.textContent = '▼');
+                }, 50);
+            }
+
+            // Store original vehicle data for filtering
+            let originalVehicleData = {};
+
+            // Vehicle modal functionality
+            async function loadVehicleClasses() {
+                try {
+                    const response = await fetch('vehicles.json');
+                    const vehicles = await response.json();
+                    originalVehicleData = vehicles; // Store original data
+                    displayVehicleClasses(vehicles);
+                } catch (error) {
+                    console.error('Error loading vehicle classes:', error);
+                }
+            }
+
+            function displayVehicleClasses(vehicles) {
+                const vehicleClassesDiv = document.getElementById('vehicleClasses');
+                vehicleClassesDiv.innerHTML = ''; // Clear existing content
+                
+                for (const [className, vehicleList] of Object.entries(vehicles)) {
+                    // Skip empty classes
+                    if (vehicleList.length === 0) continue;
+                    
+                    const classDiv = document.createElement('div');
+                    classDiv.className = 'vehicle-class';
+                    
+                    const header = document.createElement('div');
+                    header.className = 'class-header';
+                    header.innerHTML = `
+                        <h3>${className} (${vehicleList.length})</h3>
+                        <span>▼</span>
+                    `;
+                    
+                    const content = document.createElement('div');
+                    content.className = 'class-content';
+                    
+                    vehicleList.forEach(vehicle => {
+                        const vehicleDiv = document.createElement('div');
+                        vehicleDiv.className = 'vehicle-item';
+                        
+                        // Check if vehicle is already in watchlist
+                        const isWatched = watchedCars.some(car => car.model === vehicle.model);
+                        const buttonText = isWatched ? 'Watched' : 'Watch';
+                        const buttonDisabled = isWatched ? 'disabled' : '';
+                        
+                        vehicleDiv.innerHTML = `
+                            <p><strong>${vehicle.name}</strong></p>
+                            <p>Model: ${vehicle.model}</p>
+                            <p>Price: ${vehicle.price.toLocaleString()}</p>
+                            <button class="vehicle-watch-btn" ${buttonDisabled} onclick="addToWatchlistFromModal('${vehicle.model}', '${vehicle.name}', ${vehicle.price}, '${className}')">${buttonText}</button>
+                        `;
+                        content.appendChild(vehicleDiv);
+                    });
+                    
+                    header.addEventListener('click', () => {
+                        content.classList.toggle('expanded');
+                        header.querySelector('span').textContent = content.classList.contains('expanded') ? '▲' : '▼';
+                    });
+                    
+                    classDiv.appendChild(header);
+                    classDiv.appendChild(content);
+                    vehicleClassesDiv.appendChild(classDiv);
+                }
+                highlightAvailableVehiclesInModal();
+            }
+
+            function filterVehicles() {
+                const searchTerm = document.getElementById('vehicleSearchInput').value.toLowerCase();
+                
+                if (searchTerm === '') {
+                    // Show all vehicles if search is empty and close all dropdowns
+                    displayVehicleClasses(originalVehicleData);
+                    // Close all dropdowns after displaying
+                    setTimeout(() => {
+                        const allHeaders = document.querySelectorAll('.class-header');
+                        allHeaders.forEach(header => {
+                            const content = header.nextElementSibling;
+                            if (content.classList.contains('expanded')) {
+                                content.classList.remove('expanded');
+                                header.querySelector('span').textContent = '▼';
+                            }
+                        });
+                    }, 50);
+                    return;
+                }
+                
+                // Filter vehicles based on search term
+                const filteredData = {};
+                
+                for (const [className, vehicleList] of Object.entries(originalVehicleData)) {
+                    const filteredVehicles = vehicleList.filter(vehicle => 
+                        vehicle.name.toLowerCase().includes(searchTerm) || 
+                        vehicle.model.toLowerCase().includes(searchTerm)
+                    );
+                    
+                    if (filteredVehicles.length > 0) {
+                        filteredData[className] = filteredVehicles;
+                    }
+                }
+                
+                displayVehicleClasses(filteredData);
+                
+                // Auto-expand all classes when searching
+                if (searchTerm !== '') {
+                    setTimeout(() => {
+                        const allHeaders = document.querySelectorAll('.class-header');
+                        allHeaders.forEach(header => {
+                            const content = header.nextElementSibling;
+                            if (!content.classList.contains('expanded')) {
+                                content.classList.add('expanded');
+                                header.querySelector('span').textContent = '▲';
+                            }
+                        });
+                    }, 100);
+                }
+            }
+
+            function closeVehicleModal() {
+                const modal = document.getElementById('vehicleModal');
+                const toggleBtn = document.getElementById('toggleBtn');
+                
+                modal.style.display = 'none';
+                toggleBtn.textContent = '➕';
+                
+                // Clear search when closing
+                document.getElementById('vehicleSearchInput').value = '';
+                displayVehicleClasses(originalVehicleData);
+            }
+
+            // Modal drag functionality
+            function initModalDrag() {
+                const modal = document.querySelector('.modal');
+                const modalOverlay = document.querySelector('.modal-overlay');
+                
+                // Try to load position from localStorage
+                const savedModalPosition = localStorage.getItem('modalPosition');
+                if (savedModalPosition) {
+                    const { x, y } = JSON.parse(savedModalPosition);
+                    modalXOffset = x;
+                    modalYOffset = y;
+                    modalOverlay.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+                }
+
+                modal.addEventListener('mousedown', modalDragStart);
+                document.addEventListener('mousemove', modalDrag);
+                document.addEventListener('mouseup', modalDragEnd);
+            }
+
+            function modalDragStart(e) {
+                // Don't drag if clicking on input fields, buttons, or scrollable content
+                if (e.target.tagName === 'INPUT' || 
+                    e.target.tagName === 'BUTTON' || 
+                    e.target.closest('.class-content') ||
+                    e.target.closest('#vehicleClasses')) {
+                    return;
+                }
+
+                modalInitialX = e.clientX - modalXOffset;
+                modalInitialY = e.clientY - modalYOffset;
+                isModalDragging = true;
+            }
+
+            function modalDrag(e) {
+                if (isModalDragging) {
+                    e.preventDefault();
+                    modalCurrentX = e.clientX - modalInitialX;
+                    modalCurrentY = e.clientY - modalInitialY;
+                    modalXOffset = modalCurrentX;
+                    modalYOffset = modalCurrentY;
+                    
+                    const modalOverlay = document.querySelector('.modal-overlay');
+                    modalOverlay.style.transform = `translate(calc(-50% + ${modalCurrentX}px), calc(-50% + ${modalCurrentY}px))`;
+                }
+            }
+
+            function modalDragEnd(e) {
+                modalInitialX = modalCurrentX;
+                modalInitialY = modalCurrentY;
+                isModalDragging = false;
+                
+                // Save position to localStorage
+                localStorage.setItem('modalPosition', JSON.stringify({ x: modalXOffset, y: modalYOffset }));
+            }
+
+            // Load vehicle classes when the page loads
+            window.addEventListener('load', () => {
+                loadVehicleClasses();
+                
+                // Initialize modal drag functionality
+                const modalOverlay = document.querySelector('.modal-overlay');
+                const modal = document.querySelector('.modal');
+                let isModalDragging = false;
+                let modalCurrentX;
+                let modalCurrentY;
+                let modalInitialX;
+                let modalInitialY;
+                let modalXOffset = 0;
+                let modalYOffset = 0;
+
+                // Try to load modal position from localStorage
+                const savedModalPosition = localStorage.getItem('modalPosition');
+                if (savedModalPosition) {
+                    const { x, y } = JSON.parse(savedModalPosition);
+                    modalXOffset = x;
+                    modalYOffset = y;
+                    modalOverlay.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+                }
+
+                modal.addEventListener('mousedown', modalDragStart);
+                document.addEventListener('mousemove', modalDrag);
+                document.addEventListener('mouseup', modalDragEnd);
+
+                function modalDragStart(e) {
+                    // Don't drag if clicking on input fields, buttons, or scrollable content
+                    if (e.target.tagName === 'INPUT' || 
+                        e.target.tagName === 'BUTTON' || 
+                        e.target.closest('.class-content') ||
+                        e.target.closest('#vehicleClasses')) {
+                        return;
+                    }
+
+                    modalInitialX = e.clientX - modalXOffset;
+                    modalInitialY = e.clientY - modalYOffset;
+
+                    if (e.target === modal || e.target.closest('.modal')) {
+                        isModalDragging = true;
+                    }
+                }
+
+                function modalDrag(e) {
+                    if (isModalDragging) {
+                        e.preventDefault();
+                        modalCurrentX = e.clientX - modalInitialX;
+                        modalCurrentY = e.clientY - modalInitialY;
+                        modalXOffset = modalCurrentX;
+                        modalYOffset = modalCurrentY;
+                        modalOverlay.style.transform = `translate(calc(-50% + ${modalCurrentX}px), calc(-50% + ${modalCurrentY}px))`;
+                    }
+                }
+
+                function modalDragEnd(e) {
+                    modalInitialX = modalCurrentX;
+                    modalInitialY = modalCurrentY;
+                    isModalDragging = false;
+                    
+                    // Save position to localStorage
+                    localStorage.setItem('modalPosition', JSON.stringify({ x: modalXOffset, y: modalYOffset }));
+                }
+            });
+
             // API function to fetch dealership data
             async function fetchDealershipData() {
                 const response = await fetch('/api/dealership');
@@ -221,24 +824,25 @@
                 localStorage.setItem('theme', theme);
             }
 
-            // Toggle search section
-            function toggleSearch() {
-                const searchArea = document.getElementById('searchArea');
-                const toggleBtn = document.getElementById('toggleBtn');
-                const isMinimized = searchArea.classList.toggle('minimized');
-                toggleBtn.textContent = isMinimized ? '➕' : '➖';
-                
-                // Save state to localStorage
-                localStorage.setItem('searchMinimized', isMinimized);
+            // Function to open vehicle modal
+            function openVehicleModal() {
+                document.getElementById('vehicleModal').style.display = 'block';
             }
 
-            // Load search section state
-            const searchMinimized = localStorage.getItem('searchMinimized') === 'true';
-            if (searchMinimized) {
-                document.getElementById('searchArea').classList.add('minimized');
-                document.getElementById('toggleBtn').textContent = '➕';
-            } else {
-                document.getElementById('toggleBtn').textContent = '➖';
+            // Function to toggle vehicle modal
+            function toggleVehicleModal() {
+                const modal = document.getElementById('vehicleModal');
+                const toggleBtn = document.getElementById('toggleBtn');
+                
+                if (modal.style.display === 'block') {
+                    // Close modal
+                    closeVehicleModal();
+                    toggleBtn.textContent = '➕';
+                } else {
+                    // Open modal
+                    modal.style.display = 'block';
+                    toggleBtn.textContent = '➖';
+                }
             }
 
             // Load saved theme
@@ -332,6 +936,63 @@
 
             // Load watchlist when page loads
             loadWatchlist();
+            
+            // Initialize floating button color on page load
+            updateFloatingButtonColor();
+
+            // MISSING FUNCTION - Add this function to handle adding vehicles from modal
+            function addToWatchlistFromModal(model, name, price, category) {
+                // Create car object similar to the API format
+                const carData = {
+                    model: model,
+                    name: name,
+                    price: price,
+                    days_left: 'N/A' // Since we don't have this info from the static data
+                };
+                
+                // Check if car is already in watchlist
+                if (!watchedCars.some(car => car.model === model)) {
+                    watchedCars.push({...carData, category});
+                    saveWatchlist(); // Save to localStorage
+                    updateWatchlist(); // Update the display
+                    
+                    // Show notification
+                    showNotification(`${name} added to watchlist!`);
+                    
+                    // Update the button in the modal to show "Watched"
+                    const buttons = document.querySelectorAll('.vehicle-watch-btn');
+                    buttons.forEach(button => {
+                        const onclick = button.getAttribute('onclick');
+                        if (onclick && new RegExp(`addToWatchlistFromModal\\('${model}'`).test(onclick)) {
+                            button.textContent = 'Watched';
+                            button.disabled = true;
+                        }
+                    });
+                    
+                    // Optionally check against API immediately
+                    checkWatchedCars(false);
+                }
+            }
+
+            // Function to handle adding vehicles from search (vehicles.json)
+            function addToWatchlistFromSearch(carData, category) {
+                // Check if car is already in watchlist
+                if (!watchedCars.some(car => car.model === carData.model)) {
+                    watchedCars.push({...carData, category});
+                    saveWatchlist(); // Save to localStorage
+                    updateWatchlist(); // Update the display
+                    
+                    // Clear search input and results
+                    document.getElementById('searchInput').value = '';
+                    document.getElementById('result').style.display = 'none';
+                    
+                    // Show notification
+                    showNotification(`${carData.name} added to watchlist!`);
+                    
+                    // Optionally check against API immediately
+                    checkWatchedCars(false);
+                }
+            }
 
             // Drag functionality
             const watchlist = document.querySelector('.watchlist');
@@ -385,6 +1046,95 @@
                 localStorage.setItem('watchlistPosition', JSON.stringify({ x: xOffset, y: yOffset }));
             }
 
+            // Function to close all windows and show floating button
+            function closeAllWindows() {
+                const watchlist = document.querySelector('.watchlist');
+                const vehicleModal = document.getElementById('vehicleModal');
+                const floatingBtn = document.getElementById('floatingBtn');
+                
+                // Hide watchlist
+                watchlist.classList.add('hidden');
+                
+                // Hide vehicle modal if open
+                vehicleModal.style.display = 'none';
+                document.getElementById('toggleBtn').textContent = '➕';
+                
+                // Show floating button
+                floatingBtn.style.display = 'block';
+                
+                // Update floating button color
+                updateFloatingButtonColor();
+            }
+
+            // Function to open all windows and hide floating button
+            function openAllWindows() {
+                const watchlist = document.querySelector('.watchlist');
+                const floatingBtn = document.getElementById('floatingBtn');
+                const watchContent = document.getElementById('watchContent');
+                const minimizedContent = document.getElementById('minimizedContent');
+                const minimizeBtn = document.getElementById('minimizeBtn');
+                const themeButtons = document.querySelector('.theme-buttons');
+                
+                // Show watchlist in full mode
+                watchlist.classList.remove('hidden');
+                watchlist.classList.remove('minimized');
+                watchContent.style.display = 'block';
+                minimizedContent.style.display = 'none';
+                themeButtons.style.display = 'flex';
+                minimizeBtn.textContent = '−';
+                
+                // Hide floating button
+                floatingBtn.style.display = 'none';
+            }
+
+            // Function to minimize watchlist (existing minimize functionality)
+            function minimizeWatchlist() {
+                const watchlist = document.querySelector('.watchlist');
+                const watchContent = document.getElementById('watchContent');
+                const minimizedContent = document.getElementById('minimizedContent');
+                const minimizeBtn = document.getElementById('minimizeBtn');
+                const themeButtons = document.querySelector('.theme-buttons');
+                
+                if (watchContent.style.display === 'none') {
+                    // Show full watchlist
+                    watchContent.style.display = 'block';
+                    minimizedContent.style.display = 'none';
+                    themeButtons.style.display = 'flex';
+                    minimizeBtn.textContent = '−';
+                    watchlist.classList.remove('minimized');
+                } else {
+                    // Show minimized view
+                    watchContent.style.display = 'none';
+                    minimizedContent.style.display = 'block';
+                    themeButtons.style.display = 'none';
+                    minimizeBtn.textContent = '+';
+                    watchlist.classList.add('minimized');
+                }
+            }
+
+            // Function to update floating button color based on matches
+            function updateFloatingButtonColor() {
+                const floatingBtn = document.getElementById('floatingBtn');
+                if (matchedCars.size > 0 && watchedCars.length > 0) {
+                    floatingBtn.classList.remove('no-matches');
+                    floatingBtn.classList.add('has-matches');
+                } else {
+                    floatingBtn.classList.remove('has-matches');
+                    floatingBtn.classList.add('no-matches');
+                }
+            }
+
+            // Function to toggle watchlist between full and minimized view (kept for compatibility)
+            function toggleWatchlist() {
+                minimizeWatchlist();
+            }
+
+            // Function to update close button color based on matches (removed as close button is now always red)
+            function updateCloseButtonColor() {
+                // Update floating button color instead
+                updateFloatingButtonColor();
+            }
+
             async function checkWatchedCars(showError = false) {
                 if (watchedCars.length === 0) return;
 
@@ -421,6 +1171,9 @@
                     // Update the watchlist to reflect the new matches
                     updateWatchlist();
                     
+                    // Update floating button color
+                    updateFloatingButtonColor();
+                    
                 } catch (error) {
                     console.error('Error checking watched cars:', error);
                 }
@@ -451,9 +1204,19 @@
             }
 
             function removeFromWatchlist(model) {
+                // Remove from list
                 watchedCars = watchedCars.filter(car => car.model !== model);
+                saveWatchlist();
                 updateWatchlist();
-                saveWatchlist(); // Save to localStorage
+
+                // ✅ Re-enable "Watch" button(s) for the removed model in the modal
+                document.querySelectorAll('.vehicle-watch-btn').forEach(button => {
+                    const onclick = button.getAttribute('onclick');
+                    if (onclick && new RegExp(`addToWatchlistFromModal\\('${model}'`).test(onclick)){
+                        button.textContent = 'Watch';
+                        button.disabled = false;
+                    }
+                });
             }
 
             function updateWatchlist() {
@@ -467,11 +1230,14 @@
                     
                     return `
                     <div class="watch-item" style="${style}">
-                        <span class="remove-btn" onclick="removeFromWatchlist('${car.model}')">&times;</span>
                         <p>${car.name}</p>
+                        <span class="remove-btn" onclick="removeFromWatchlist('${car.model}')">&times;</span>
                     </div>
                     `;
                 }).join('');
+                
+                // Update floating button color
+                updateFloatingButtonColor();
             }
 
             async function searchCar() {
@@ -525,7 +1291,7 @@
                                     <p><strong>Name:</strong> ${car.name}</p>
                                     <p><strong>Model:</strong> ${car.model}</p>
                                     <p><strong>Category:</strong> ${car.category}</p>
-                                    <p><strong>Price:</strong> $${car.price.toLocaleString()}</p>
+                                    <p><strong>Price:</strong> ${car.price.toLocaleString()}</p>
                                     <p><strong>Days Left:</strong> ${car.days_left}</p>
                                     <button onclick='addToWatchlist(${JSON.stringify(car)}, "${car.category}")'>Watch</button>
                                 </div>
