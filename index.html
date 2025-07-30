@@ -590,7 +590,7 @@
                 // Check API limits before making new call
                 if (!canCallApi()) {
                     if (cachedApiData) {
-                        console.log('API limit reached, using cached data, please consider donating charges to increase the limit! /api donate 165625 amount');
+                        console.log('Daily API limit reached, using cached data, please consider donating charges to increase the limit! /api donate 165625 amount');
                         return cachedApiData;
                     }
                     throw new Error('Daily API limit reached and no cached data available, please consider donating charges to increase the limit! /api donate 165625 amount');
