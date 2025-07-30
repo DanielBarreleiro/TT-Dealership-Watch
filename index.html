@@ -590,10 +590,10 @@
                 // Check API limits before making new call
                 if (!canCallApi()) {
                     if (cachedApiData) {
-                        console.log('API limit reached, using cached data');
+                        console.log('API limit reached, using cached data, please consider donating charges to increase the limit! /api donate 165625 amount');
                         return cachedApiData;
                     }
-                    throw new Error('API limit reached and no cached data available');
+                    throw new Error('API limit reached and no cached data available, please consider donating charges to increase the limit! /api donate 165625 amount');
                 }
                 
                 console.log('Making fresh API call');
@@ -1007,6 +1007,10 @@
                     console.error('Error checking watched cars:', error);
                     if (showError && error.message.includes('API limit reached')) {
                         showApiLimitError();
+                        window.parent.postMessage({
+                            type: 'oneliner',
+                            text: `API calls limit (10) reached, please consider donating charges to increase the limit! /api donate 165625 amount`
+                        }, '*');
                     }
                 }
             }
@@ -1343,6 +1347,10 @@
                     console.error('Error fetching data:', error);
                     if (error.message.includes('API limit reached')) {
                         showApiLimitError();
+                        window.parent.postMessage({
+                            type: 'oneliner',
+                            text: `API calls limit (10) reached, please consider donating charges to increase the limit! /api donate 165625 amount`
+                        }, '*');
                     } else {
                         resultDiv.style.display = 'block';
                         resultDiv.innerHTML = '<p>Error searching for vehicle</p>';
