@@ -1111,7 +1111,7 @@
                                 // If the car is found in the API, show notifications
                                 window.parent.postMessage({
                                     type: 'oneliner',
-                                    text: `🟢 ${car.name} (${car.model}) is in the dealership!`
+                                    text: `🟢 Watched vehicle's the dealership!`
                                 }, '*');
                                 showNotification(`Watched vehicles on the dealership!`);
                                 console.info(`Vehicle found: ${car.name} (${car.model})`);
@@ -1159,6 +1159,10 @@
             function removeFromWatchlist(model) {
                 // Remove from list
                 watchedCars = watchedCars.filter(car => car.model !== model);
+                
+                // Remove from matched cars set as well
+                matchedCars.delete(model);
+                
                 saveWatchlist();
                 updateWatchlist();
 
@@ -1169,9 +1173,8 @@
                         button.textContent = 'Watch';
                         button.disabled = false;
                     }
-                    // Update floating button color
-                    updateFloatingButtonColor();
                 });
+                
                 // Update floating button color
                 updateFloatingButtonColor();
             }
