@@ -488,7 +488,7 @@
         </style>
     </head>
     <body style="font-family: Arial, Helvetica, sans-serif;">
-        <div id="vehicleModal" class="modal-overlay">
+        <div id="vehicleModal" class="modal-overlay" style="display: none;">
             <div class="modal">
                 <button class="modal-close" onclick="closeVehicleModal()">×</button>
                 <div class="modal-search" style="display: flex; gap: 10px; align-items: center;">
@@ -517,7 +517,7 @@
         </div>
 
         <!-- Floating button that appears when everything is closed -->
-        <button id="floatingBtn" class="floating-btn no-matches" onclick="openAllWindows()">Dealership Watch</button>
+        <button id="floatingBtn" class="floating-btn no-matches" style="display: block;" onclick="openAllWindows()">Dealership Watch</button>
 
         <script>
             async function highlightAvailableVehiclesInModal() {
@@ -687,64 +687,14 @@
                 displayVehicleClasses(originalVehicleData);
             }
 
-            // Modal drag functionality
-            function initModalDrag() {
-                const modal = document.querySelector('.modal');
-                const modalOverlay = document.querySelector('.modal-overlay');
-                
-                // Try to load position from localStorage
-                const savedModalPosition = localStorage.getItem('modalPosition');
-                if (savedModalPosition) {
-                    const { x, y } = JSON.parse(savedModalPosition);
-                    modalXOffset = x;
-                    modalYOffset = y;
-                    modalOverlay.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
-                }
-
-                modal.addEventListener('mousedown', modalDragStart);
-                document.addEventListener('mousemove', modalDrag);
-                document.addEventListener('mouseup', modalDragEnd);
-            }
-
-            function modalDragStart(e) {
-                // Don't drag if clicking on input fields, buttons, or scrollable content
-                if (e.target.tagName === 'INPUT' || 
-                    e.target.tagName === 'BUTTON' || 
-                    e.target.closest('.class-content') ||
-                    e.target.closest('#vehicleClasses')) {
-                    return;
-                }
-
-                modalInitialX = e.clientX - modalXOffset;
-                modalInitialY = e.clientY - modalYOffset;
-                isModalDragging = true;
-            }
-
-            function modalDrag(e) {
-                if (isModalDragging) {
-                    e.preventDefault();
-                    modalCurrentX = e.clientX - modalInitialX;
-                    modalCurrentY = e.clientY - modalInitialY;
-                    modalXOffset = modalCurrentX;
-                    modalYOffset = modalCurrentY;
-                    
-                    const modalOverlay = document.querySelector('.modal-overlay');
-                    modalOverlay.style.transform = `translate(calc(-50% + ${modalCurrentX}px), calc(-50% + ${modalCurrentY}px))`;
-                }
-            }
-
-            function modalDragEnd(e) {
-                modalInitialX = modalCurrentX;
-                modalInitialY = modalCurrentY;
-                isModalDragging = false;
-                
-                // Save position to localStorage
-                localStorage.setItem('modalPosition', JSON.stringify({ x: modalXOffset, y: modalYOffset }));
-            }
-
             // Load vehicle classes when the page loads
             window.addEventListener('load', () => {
                 loadVehicleClasses();
+                
+                // Auto-check for matches when app opens
+                setTimeout(() => {
+                    checkWatchedCars(false);
+                }, 1000); // Wait 1 second for everything to load
                 
                 // Initialize modal drag functionality
                 const modalOverlay = document.querySelector('.modal-overlay');
@@ -1326,7 +1276,6 @@
                     resultDiv.innerHTML = '<p>Error searching for vehicle</p>';
                 }
             }
-            checkWatchedCars();
         </script>
     </body>
 </html>
