@@ -593,7 +593,7 @@
                         console.log('API limit reached, using cached data, please consider donating charges to increase the limit! /api donate 165625 amount');
                         return cachedApiData;
                     }
-                    throw new Error('API limit reached and no cached data available, please consider donating charges to increase the limit! /api donate 165625 amount');
+                    throw new Error('Daily API limit reached and no cached data available, please consider donating charges to increase the limit! /api donate 165625 amount');
                 }
                 
                 console.log('Making fresh API call');
@@ -1009,7 +1009,7 @@
                         showApiLimitError();
                         window.parent.postMessage({
                             type: 'oneliner',
-                            text: `API calls limit (10) reached, please consider donating charges to increase the limit! /api donate 165625 amount`
+                            text: `Daily API calls limit (10) reached, please consider donating charges to increase the limit! /api donate 165625 amount`
                         }, '*');
                     }
                 }
@@ -1349,7 +1349,7 @@
                         showApiLimitError();
                         window.parent.postMessage({
                             type: 'oneliner',
-                            text: `API calls limit (10) reached, please consider donating charges to increase the limit! /api donate 165625 amount`
+                            text: `Daily API calls limit (10) reached, please consider donating charges to increase the limit! /api donate 165625 amount`
                         }, '*');
                     } else {
                         resultDiv.style.display = 'block';
