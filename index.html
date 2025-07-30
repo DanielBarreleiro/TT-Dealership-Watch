@@ -885,7 +885,7 @@
                         checkWatchedCarsWithCachedData();
                     }).catch(err => {
                         console.error('Error fetching data for modal:', err);
-                        if (err.message.includes('API limit reached')) {
+                        if (err.message.includes('Daily API limit reached')) {
                             // Use cached data for highlighting if available
                             highlightAvailableVehiclesInModal();
                             checkWatchedCarsWithCachedData();
@@ -1008,7 +1008,7 @@
                     
                 } catch (error) {
                     console.error('Error checking watched cars:', error);
-                    if (showError && error.message.includes('API limit reached')) {
+                    if (showError && error.message.includes('Daily API limit reached')) {
                         showApiLimitError();
                         window.parent.postMessage({
                             type: 'oneliner',
@@ -1348,7 +1348,7 @@
                     
                 } catch (error) {
                     console.error('Error fetching data:', error);
-                    if (error.message.includes('API limit reached')) {
+                    if (error.message.includes('Daily API limit reached')) {
                         showApiLimitError();
                         window.parent.postMessage({
                             type: 'oneliner',
