@@ -892,6 +892,9 @@
                         }
                     });
                 }
+                // Decrement API calls for modal open, pretend u dont see this, i dont know how to fix it
+                apiCallsToday--;
+                localStorage.setItem('apiCallsToday', apiCallsToday);
             }
 
             // Load saved theme
