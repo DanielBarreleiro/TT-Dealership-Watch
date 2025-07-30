@@ -510,6 +510,7 @@
             <div id="watchContent" class="watch-section">
                 <h3>Watched vehicles:</h3>
                 <div id="watchedItems"></div>
+                <button onclick="checkWatchedCars(true)" style="width: 100%; padding: 8px; margin-top: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-family: Arial, sans-serif;">Check Now</button>
             </div>
             <div id="minimizedContent" style="display: none;">
                 <h3 style="margin: 0; text-align: center;">Dealership Watch</h3>
@@ -520,9 +521,100 @@
         <button id="floatingBtn" class="floating-btn no-matches" style="display: block;" onclick="openAllWindows()">Dealership Watch</button>
 
         <script>
+            // Store matched cars
+            let matchedCars = new Set();
+
+            // API caching
+            let cachedApiData = null;
+            let lastApiCallTime = 0;
+            const API_CACHE_DURATION = 60000; // 1 minute in milliseconds
+
+            // API rate limiting
+            let apiCallsToday = parseInt(localStorage.getItem('apiCallsToday')) || 0;
+            let lastApiCallDate = localStorage.getItem('lastApiCallDate') || null;
+
+            // Function to check if API call is allowed
+            function canCallApi() {
+                const now = new Date();
+                const today = now.toDateString();
+                
+                // Reset counter if it's a new day
+                if (lastApiCallDate !== today) {
+                    apiCallsToday = 0;
+                    lastApiCallDate = today;
+                    localStorage.setItem('apiCallsToday', apiCallsToday);
+                    localStorage.setItem('lastApiCallDate', lastApiCallDate);
+                    return true;
+                }
+
+                // Check if under limit
+                if (apiCallsToday < 10) {
+                    return true;
+                }
+
+                return false;
+            }
+
+            // Function to increment API call counter
+            function incrementApiCalls() {
+                const today = new Date().toDateString();
+                apiCallsToday++;
+                lastApiCallDate = today;
+                localStorage.setItem('apiCallsToday', apiCallsToday);
+                localStorage.setItem('lastApiCallDate', lastApiCallDate);
+            }
+
+            // Function to show API limit error
+            function showApiLimitError() {
+                const notification = document.getElementById('notification');
+                notification.textContent = "Limit of 10 api calls per day, please try in 24h or wait for the next day (if you donate charges I can increase this limit! /api donate 165625 amount)";
+                notification.style.backgroundColor = '#ff4444';
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    notification.style.backgroundColor = '#4CAF50';
+                }, 10000);
+            }
+
+            // API function to fetch dealership data with caching
+            async function fetchDealershipData(useCache = true) {
+                const now = Date.now();
+                
+                // Return cached data if it's still valid and useCache is true
+                if (useCache && cachedApiData && (now - lastApiCallTime) < API_CACHE_DURATION) {
+                    console.log('Using cached API data');
+                    return cachedApiData;
+                }
+                
+                // Check API limits before making new call
+                if (!canCallApi()) {
+                    if (cachedApiData) {
+                        console.log('API limit reached, using cached data');
+                        return cachedApiData;
+                    }
+                    throw new Error('API limit reached and no cached data available');
+                }
+                
+                console.log('Making fresh API call');
+                const response = await fetch('/api/dealership');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                
+                const data = await response.json();
+                
+                // Update cache and tracking
+                cachedApiData = data;
+                lastApiCallTime = now;
+                incrementApiCalls();
+                
+                return data;
+            }
+
             async function highlightAvailableVehiclesInModal() {
                 try {
-                    const data = await fetchDealershipData();
+                    const data = await fetchDealershipData(true); // Use cached data
 
                     // Loop over all visible vehicle items in the modal
                     document.querySelectorAll('.vehicle-item').forEach(item => {
@@ -543,6 +635,7 @@
                     });
                 } catch (err) {
                     console.error('Error highlighting vehicles in modal:', err);
+                    // Don't show error to user since this is just visual enhancement
                 }
             }
 
@@ -691,10 +784,13 @@
             window.addEventListener('load', () => {
                 loadVehicleClasses();
                 
-                // Auto-check for matches when app opens
-                setTimeout(() => {
-                    checkWatchedCars(false);
-                }, 1000); // Wait 1 second for everything to load
+                // Make initial API call to populate cache (don't show errors on startup)
+                fetchDealershipData(false).then(() => {
+                    checkWatchedCarsWithCachedData();
+                }).catch(err => {
+                    console.error('Initial API call failed:', err);
+                    // Don't show error to user on startup
+                });
                 
                 // Initialize modal drag functionality
                 const modalOverlay = document.querySelector('.modal-overlay');
@@ -758,15 +854,6 @@
                 }
             });
 
-            // API function to fetch dealership data
-            async function fetchDealershipData() {
-                const response = await fetch('/api/dealership');
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            }
-
             // Theme functionality
             function setTheme(theme) {
                 document.documentElement.setAttribute('data-theme', theme);
@@ -788,9 +875,22 @@
                     closeVehicleModal();
                     toggleBtn.textContent = '➕';
                 } else {
-                    // Open modal
+                    // Open modal - refresh API data when opening modal
                     modal.style.display = 'block';
                     toggleBtn.textContent = '➖';
+                    
+                    // Fetch fresh data when opening modal (but use cache if API limit reached)
+                    fetchDealershipData(false).then(() => {
+                        highlightAvailableVehiclesInModal();
+                        checkWatchedCarsWithCachedData();
+                    }).catch(err => {
+                        console.error('Error fetching data for modal:', err);
+                        if (err.message.includes('API limit reached')) {
+                            // Use cached data for highlighting if available
+                            highlightAvailableVehiclesInModal();
+                            checkWatchedCarsWithCachedData();
+                        }
+                    });
                 }
             }
 
@@ -805,57 +905,6 @@
             
             // Audio for notifications
             const audio = new Audio('notif.wav');
-
-            // Store matched cars
-            let matchedCars = new Set();
-
-            // API rate limiting
-            let apiCallsToday = parseInt(localStorage.getItem('apiCallsToday')) || 0;
-            let lastApiCallDate = localStorage.getItem('lastApiCallDate') || null;
-
-            // Function to check if API call is allowed
-            function canCallApi() {
-                const now = new Date();
-                const today = now.toDateString();
-                
-                // Reset counter if it's a new day
-                if (lastApiCallDate !== today) {
-                    apiCallsToday = 0;
-                    lastApiCallDate = today;
-                    localStorage.setItem('apiCallsToday', apiCallsToday);
-                    localStorage.setItem('lastApiCallDate', lastApiCallDate);
-                    return true;
-                }
-
-                // Check if under limit
-                if (apiCallsToday < 10) {
-                    return true;
-                }
-
-                return false;
-            }
-
-            // Function to increment API call counter
-            function incrementApiCalls() {
-                const today = new Date().toDateString();
-                apiCallsToday++;
-                lastApiCallDate = today;
-                localStorage.setItem('apiCallsToday', apiCallsToday);
-                localStorage.setItem('lastApiCallDate', lastApiCallDate);
-            }
-
-            // Function to show API limit error
-            function showApiLimitError() {
-                const notification = document.getElementById('notification');
-                notification.textContent = "Limit of 10 api calls per day, please try in 24h or wait for the next day (if you donate charges I can increase this limit! /api donate 165625 amount)";
-                notification.style.backgroundColor = '#ff4444';
-                notification.classList.add('show');
-                
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                    notification.style.backgroundColor = '#4CAF50';
-                }, 10000);
-            }
 
             // Show notification
             function showNotification(message) {
@@ -889,6 +938,88 @@
             // Initialize floating button color on page load
             updateFloatingButtonColor();
 
+            // Function to check watched cars using cached data (no API call)
+            function checkWatchedCarsWithCachedData() {
+                if (watchedCars.length === 0 || !cachedApiData) return;
+
+                // Clear previous matches
+                matchedCars.clear();
+
+                // Check each watched car against cached data
+                watchedCars.forEach(watchedCar => {
+                    for (const category in cachedApiData) {
+                        const car = cachedApiData[category]?.find(c => c.model === watchedCar.model);
+                        if (car) {
+                            // If the car is found in the API, show notifications
+                            window.parent.postMessage({
+                                type: 'oneliner',
+                                text: `🟢 Watched vehicle's the dealership!`
+                            }, '*');
+                            showNotification(`Watched vehicles on the dealership!`);
+                            console.info(`Vehicle found: ${car.name} (${car.model})`);
+                            matchedCars.add(car.model); // Add to matched cars
+                            break; // Exit the category loop once we find a match
+                        }
+                    }
+                });
+                
+                // Update the watchlist to reflect the new matches
+                updateWatchlist();
+                
+                // Update floating button color
+                updateFloatingButtonColor();
+            }
+
+            async function checkWatchedCars(showError = false) {
+                if (watchedCars.length === 0) return;
+
+                try {
+                    const data = await fetchDealershipData(false); // Force fresh API call
+                    
+                    // Clear previous matches
+                    matchedCars.clear();
+
+                    // Check each watched car
+                    watchedCars.forEach(watchedCar => {
+                        for (const category in data) {
+                            const car = data[category]?.find(c => c.model === watchedCar.model);
+                            if (car) {
+                                // If the car is found in the API, show notifications
+                                window.parent.postMessage({
+                                    type: 'oneliner',
+                                    text: `🟢 Watched vehicle's the dealership!`
+                                }, '*');
+                                showNotification(`Watched vehicles on the dealership!`);
+                                console.info(`Vehicle found: ${car.name} (${car.model})`);
+                                matchedCars.add(car.model); // Add to matched cars
+                                break; // Exit the category loop once we find a match
+                            }
+                        }
+                    });
+                    
+                    // Update the watchlist to reflect the new matches
+                    updateWatchlist();
+                    
+                    // Update floating button color
+                    updateFloatingButtonColor();
+                    
+                } catch (error) {
+                    console.error('Error checking watched cars:', error);
+                    if (showError && error.message.includes('API limit reached')) {
+                        showApiLimitError();
+                    }
+                }
+            }
+
+            // Start checking every 24h - don't show errors on auto-check
+            setInterval(() => checkWatchedCars(false), 86400000);
+            
+            // Clear search results and input
+            function clearSearch() {
+                document.getElementById('searchInput').value = '';
+                document.getElementById('result').style.display = 'none';
+            }
+
             // MISSING FUNCTION - Add this function to handle adding vehicles from modal
             function addToWatchlistFromModal(model, name, price, category) {
                 // Create car object similar to the API format
@@ -918,8 +1049,8 @@
                         }
                     });
                     
-                    // Optionally check against API immediately
-                    checkWatchedCars(false);
+                    // Check against cached data immediately (no API call)
+                    checkWatchedCarsWithCachedData();
                 }
                 // Update floating button color
                 updateFloatingButtonColor();
@@ -940,8 +1071,8 @@
                     // Show notification
                     showNotification(`${carData.name} added to watchlist!`);
                     
-                    // Optionally check against API immediately
-                    checkWatchedCars(false);
+                    // Check against cached data immediately (no API call)
+                    checkWatchedCarsWithCachedData();
                 }
             }
 
@@ -1032,7 +1163,7 @@
                 watchContent.style.display = 'block';
                 minimizedContent.style.display = 'none';
                 themeButtons.style.display = 'flex';
-                minimizeBtn.textContent = '−';
+                if (minimizeBtn) minimizeBtn.textContent = '−';
                 
                 // Hide floating button
                 floatingBtn.style.display = 'none';
@@ -1080,67 +1211,6 @@
                 minimizeWatchlist();
             }
 
-            // Function to update close button color based on matches (removed as close button is now always red)
-            function updateCloseButtonColor() {
-                // Update floating button color instead
-                updateFloatingButtonColor();
-            }
-
-            async function checkWatchedCars(showError = false) {
-                if (watchedCars.length === 0) return;
-
-                if (!canCallApi()) {
-                    if (showError) {
-                        showApiLimitError();
-                    }
-                    return;
-                }
-
-                try {
-                    const data = await fetchDealershipData();
-                    incrementApiCalls();
-                    
-                    // Clear previous matches
-                    matchedCars.clear();
-
-                    // Check each watched car
-                    watchedCars.forEach(watchedCar => {
-                        for (const category in data) {
-                            const car = data[category]?.find(c => c.model === watchedCar.model);
-                            if (car) {
-                                // If the car is found in the API, show notifications
-                                window.parent.postMessage({
-                                    type: 'oneliner',
-                                    text: `🟢 Watched vehicle's the dealership!`
-                                }, '*');
-                                showNotification(`Watched vehicles on the dealership!`);
-                                console.info(`Vehicle found: ${car.name} (${car.model})`);
-                                matchedCars.add(car.model); // Add to matched cars
-                                break; // Exit the category loop once we find a match
-                            }
-                        }
-                    });
-                    
-                    // Update the watchlist to reflect the new matches
-                    updateWatchlist();
-                    
-                    // Update floating button color
-                    updateFloatingButtonColor();
-                    
-                } catch (error) {
-                    console.error('Error checking watched cars:', error);
-                }
-            }
-
-            // Start checking every 24h - don't show errors on auto-check
-            setInterval(() => checkWatchedCars(false), 86400000);
-            
-            // Clear search results and input
-            function clearSearch() {
-                document.getElementById('searchInput').value = '';
-                document.getElementById('result').style.display = 'none';
-            }
-
             function addToWatchlist(carData, category) {
                 // Check if car is already in watchlist
                 if (!watchedCars.some(car => car.model === carData.model)) {
@@ -1151,8 +1221,8 @@
                     document.getElementById('searchInput').value = '';
                     document.getElementById('result').style.display = 'none';
                     
-                    // Immediately check all cars against the API - show errors on manual action
-                    checkWatchedCars(true);
+                    // Check against cached data immediately (no API call needed since we just searched)
+                    checkWatchedCarsWithCachedData();
                 }
             }
 
@@ -1214,14 +1284,8 @@
                     return;
                 }
 
-                if (!canCallApi()) {
-                    showApiLimitError();
-                    return;
-                }
-
                 try {
-                    const data = await fetchDealershipData();
-                    incrementApiCalls();
+                    const data = await fetchDealershipData(false); // Force fresh API call for search
                     
                     let matches = [];
                     for (const category in data) {
@@ -1277,8 +1341,12 @@
                     
                 } catch (error) {
                     console.error('Error fetching data:', error);
-                    resultDiv.style.display = 'block';
-                    resultDiv.innerHTML = '<p>Error searching for vehicle</p>';
+                    if (error.message.includes('API limit reached')) {
+                        showApiLimitError();
+                    } else {
+                        resultDiv.style.display = 'block';
+                        resultDiv.innerHTML = '<p>Error searching for vehicle</p>';
+                    }
                 }
             }
         </script>
