@@ -1108,9 +1108,11 @@
                         for (const category in data) {
                             const car = data[category]?.find(c => c.model === watchedCar.model);
                             if (car) {
-                                // If the car is found in the API, play the sound and show notification
-                                audio.volume = 0.2; // Set volume to 20%
-                                audio.play();
+                                // If the car is found in the API, show notifications
+                                window.parent.postMessage({
+                                    type: 'oneliner',
+                                    text: `🟢 ${car.name} (${car.model}) is in the dealership!`
+                                }, '*');
                                 showNotification(`Watched vehicles on the dealership!`);
                                 console.info(`Vehicle found: ${car.name} (${car.model})`);
                                 matchedCars.add(car.model); // Add to matched cars
