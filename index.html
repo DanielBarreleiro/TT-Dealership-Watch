@@ -548,7 +548,7 @@
                 }
 
                 // Check if under limit
-                if (apiCallsToday < 10) {
+                if (apiCallsToday < 25) {
                     return true;
                 }
 
@@ -567,7 +567,7 @@
             // Function to show API limit error
             function showApiLimitError() {
                 const notification = document.getElementById('notification');
-                notification.textContent = "Limit of 10 api calls per day, please try in 24h or wait for the next day (if you donate charges I can increase this limit! /api donate 165625 amount)";
+                notification.textContent = "Limit of 25 api calls per day, please try in 24h or wait for the next day (if you donate charges I can increase this limit! /api donate 165625 amount)";
                 notification.style.backgroundColor = '#ff4444';
                 notification.classList.add('show');
                 
@@ -593,9 +593,9 @@
                         console.log('Daily API limit reached, using cached data, please consider donating charges to increase the limit! /api donate 165625 amount');
                         return cachedApiData;
                         sleep(5000);
-                        showApiLimitError(notification.textContent = "Daily API limit reached (10), using cached data, please consider donating charges to increase the limit! /api donate 165625 amount");
+                        showApiLimitError(notification.textContent = "Daily API limit reached (25), using cached data, please consider donating charges to increase the limit! /api donate 165625 amount");
                     }
-                    throw new Error('Daily API limit reached and no cached data available, please consider donating charges to increase the limit! /api donate 165625 amount');
+                    throw new Error('Daily API limit reached (25) and no cached data available, please consider donating charges to increase the limit! /api donate 165625 amount');
                 }
                 
                 console.log('Making fresh API call');
@@ -999,6 +999,10 @@
                                 matchedCars.add(car.model); // Add to matched cars
                                 break; // Exit the category loop once we find a match
                             }
+                            else {
+                                // If the car is not found, show notification
+                                showNotification(`Watched vehicles not on the dealership.`);
+                            }
                         }
                     });
                     
@@ -1014,7 +1018,7 @@
                         showApiLimitError();
                         window.parent.postMessage({
                             type: 'oneliner',
-                            text: `Daily API calls limit (10) reached, please consider donating charges to increase the limit! /api donate 165625 amount`
+                            text: `Daily API calls limit (25) reached, please consider donating charges to increase the limit! /api donate 165625 amount`
                         }, '*');
                     }
                 }
@@ -1354,7 +1358,7 @@
                         showApiLimitError();
                         window.parent.postMessage({
                             type: 'oneliner',
-                            text: `Daily API calls limit (10) reached, please consider donating charges to increase the limit! /api donate 165625 amount`
+                            text: `Daily API calls limit (25) reached, please consider donating charges to increase the limit! /api donate 165625 amount`
                         }, '*');
                     } else {
                         resultDiv.style.display = 'block';
