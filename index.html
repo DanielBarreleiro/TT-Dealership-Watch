@@ -545,6 +545,21 @@
             let lastApiCallTime = 0;
             const API_CACHE_DURATION = 60000; // 1 minute in milliseconds
 
+            // IMPORTANT: Load theme FIRST before anything else
+            function initializeTheme() {
+                try {
+                    const savedTheme = localStorage.getItem('theme') || 'light';
+                    setTheme(savedTheme);
+                    console.log('Theme loaded:', savedTheme);
+                } catch (error) {
+                    console.error('Error loading saved theme from localStorage:', error);
+                    setTheme('light'); // Fallback to default theme
+                }
+            }
+
+            // Call theme initialization immediately
+            initializeTheme();
+
             // API function to fetch dealership data with caching
             async function fetchDealershipData(useCache = true) {
                 const now = Date.now();
@@ -955,29 +970,27 @@
                 }
             }
 
-            // Load saved theme and position
-            try {
-                const savedTheme = localStorage.getItem('theme') || 'light';
-                setTheme(savedTheme);
-                
-                // Load watchlist position if saved
-                const savedPosition = localStorage.getItem('watchlistPosition');
-                if (savedPosition) {
-                    const { x, y } = JSON.parse(savedPosition);
-                    xOffset = x;
-                    yOffset = y;
-                    watchlist.style.transform = `translate(${x}px, ${y}px)`;
-                }
-            } catch (error) {
-                console.error('Error loading saved data from localStorage:', error);
-                setTheme('light'); // Fallback to default theme
-            }
-
             // Store watched cars
             let watchedCars = [];
             
             // Audio for notifications
             const audio = new Audio('notif.wav');
+
+            // Load saved position (theme is already loaded at the top)
+            function loadSavedPosition() {
+                try {
+                    // Load watchlist position if saved
+                    const savedPosition = localStorage.getItem('watchlistPosition');
+                    if (savedPosition) {
+                        const { x, y } = JSON.parse(savedPosition);
+                        xOffset = x;
+                        yOffset = y;
+                        watchlist.style.transform = `translate(${x}px, ${y}px)`;
+                    }
+                } catch (error) {
+                    console.error('Error loading saved position from localStorage:', error);
+                }
+            }
 
             // Show notification
             function showNotification(message) {
@@ -991,7 +1004,7 @@
                 }, 3000);
             }
 
-            // Load watchlist from localStorage
+            // Load watchlist from localStorage - MOVED TO BE CALLED AFTER THEME IS SET
             function loadWatchlist() {
                 try {
                     const saved = localStorage.getItem('watchedCars');
@@ -1016,11 +1029,22 @@
                 }
             }
 
-            // Load watchlist when page loads
-            loadWatchlist();
-            
-            // Initialize floating button color on page load
-            updateFloatingButtonColor();
+            // Initialize everything in proper order
+            function initializeApp() {
+                // 1. Theme is already loaded at the top of the script
+                
+                // 2. Load watchlist AFTER theme is set
+                loadWatchlist();
+                
+                // 3. Load saved position
+                loadSavedPosition();
+                
+                // 4. Initialize floating button color
+                updateFloatingButtonColor();
+            }
+
+            // Call initialization when DOM is ready
+            document.addEventListener('DOMContentLoaded', initializeApp);
 
             // Function to check watched cars using cached data (no API call)
             function checkWatchedCarsWithCachedData() {
