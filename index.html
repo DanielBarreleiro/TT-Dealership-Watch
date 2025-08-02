@@ -576,21 +576,23 @@
                     const data = await response.json();
                     console.log("API response data:", JSON.stringify(data, null, 2));
                     
-                    // Extract vehicle models from the API response and store them
-                    if (data && Array.isArray(data)) {
+                    // Extract vehicle models from the API response structure
+                    if (data && data.vehicles && typeof data.vehicles === 'object') {
                         ownedVehicles.clear();
-                        data.forEach(vehicle => {
-                            if (vehicle.model) {
-                                ownedVehicles.add(vehicle.model);
-                                console.log("Adding owned vehicle:", vehicle.model);
-                            }
+                        
+                        // The vehicle models are the keys of the vehicles object
+                        Object.keys(data.vehicles).forEach(vehicleModel => {
+                            ownedVehicles.add(vehicleModel);
+                            console.log("Adding owned vehicle:", vehicleModel);
                         });
+                        
                         console.log("All owned vehicles:", Array.from(ownedVehicles));
                         
                         // Highlight owned vehicles in modal if it's open
                         highlightOwnedVehiclesInModal();
                     } else {
-                        console.log("No vehicle data received or data is not an array");
+                        console.log("No vehicle data received or vehicles object not found");
+                        console.log("Expected data.vehicles to be an object, got:", typeof data?.vehicles);
                     }
                     
                     return data;
