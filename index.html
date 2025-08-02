@@ -457,6 +457,12 @@
                 cursor: not-allowed;
             }
 
+            .vehicle-watch-btn.owned-btn:disabled {
+                background-color: #2196F3 !important;
+                color: white !important;
+                cursor: not-allowed;
+            }
+
             .modal-close {
                 position: absolute;
                 top: 10px;
@@ -733,14 +739,30 @@
                         
                         // Check if vehicle is already in watchlist
                         const isWatched = watchedCars.some(car => car.model === vehicle.model);
-                        const buttonText = isWatched ? 'Watched' : 'Watch';
-                        const buttonDisabled = isWatched ? 'disabled' : '';
+                        // Check if vehicle is owned
+                        const isOwned = ownedVehicles.has(vehicle.model);
+                        
+                        let buttonText, buttonDisabled, buttonClass;
+                        
+                        if (isOwned) {
+                            buttonText = 'Owned';
+                            buttonDisabled = 'disabled';
+                            buttonClass = 'vehicle-watch-btn owned-btn';
+                        } else if (isWatched) {
+                            buttonText = 'Watched';
+                            buttonDisabled = 'disabled';
+                            buttonClass = 'vehicle-watch-btn';
+                        } else {
+                            buttonText = 'Watch';
+                            buttonDisabled = '';
+                            buttonClass = 'vehicle-watch-btn';
+                        }
                         
                         vehicleDiv.innerHTML = `
                             <p><strong>${vehicle.name}</strong></p>
                             <p>Model: ${vehicle.model}</p>
                             <p>Price: ${vehicle.price.toLocaleString()}</p>
-                            <button class="vehicle-watch-btn" ${buttonDisabled} onclick="addToWatchlistFromModal('${vehicle.model}', '${vehicle.name}', ${vehicle.price}, '${className}')">${buttonText}</button>
+                            <button class="${buttonClass}" ${buttonDisabled} onclick="addToWatchlistFromModal('${vehicle.model}', '${vehicle.name}', ${vehicle.price}, '${className}')">${buttonText}</button>
                         `;
                         content.appendChild(vehicleDiv);
                     });
@@ -1059,6 +1081,12 @@
 
             // Function to handle adding vehicles from modal
             function addToWatchlistFromModal(model, name, price, category) {
+                // Check if vehicle is owned - prevent adding owned vehicles
+                if (ownedVehicles.has(model)) {
+                    showNotification("You already own this vehicle!");
+                    return;
+                }
+                
                 // Create car object similar to the API format
                 const carData = {
                     model: model,
