@@ -981,6 +981,8 @@
                                 text: `🟢 Watched vehicle's the dealership!`
                             }, '*');
                             showNotification(`Watched vehicles on the dealership!`);
+                            audio.volume = 0.2; // Set volume for notification sound
+                            audio.play(); // Play notification sound
                             console.info(`Vehicle found: ${car.name} (${car.model})`);
                             matchedCars.add(car.model); // Add to matched cars
                             break; // Exit the category loop once we find a match
@@ -1015,6 +1017,8 @@
                                     text: `🟢 Watched vehicle's the dealership!`
                                 }, '*');
                                 showNotification(`Watched vehicles on the dealership!`);
+                                audio.volume = 0.2; // Set volume for notification sound
+                                audio.play(); // Play notification sound
                                 console.info(`Vehicle found: ${car.name} (${car.model})`);
                                 matchedCars.add(car.model); // Add to matched cars
                                 break; // Exit the category loop once we find a match
