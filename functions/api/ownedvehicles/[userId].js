@@ -7,6 +7,8 @@ export async function onRequest(context) {
         'X-Tycoon-Key': context.env.TYCOON_API_KEY
       }
     });
+    console.log(`https://tycoon-2epova.users.cfx.re/status/ownedvehicles/${userId}`)
+    console.log(`Fetching owned vehicles for userId: ${userId}`);
     
     const data = await response.json();
     
