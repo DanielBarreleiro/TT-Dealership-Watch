@@ -417,6 +417,13 @@
                 box-sizing: border-box;
                 overflow: hidden; /* Hide overflow */
                 position: relative; /* For button positioning */
+                transition: all 0.2s; /* Add smooth transition */
+            }
+
+            /* Owned vehicle styling - blue border and background */
+            .vehicle-item.owned {
+                border: 2px solid #2196F3 !important;
+                background: rgba(33, 150, 243, 0.1) !important;
             }
 
             .vehicle-item p {
@@ -524,58 +531,13 @@
             // Store matched cars
             let matchedCars = new Set();
 
+            // Store owned vehicles from API
+            let ownedVehicles = new Set();
+
             // API caching
             let cachedApiData = null;
             let lastApiCallTime = 0;
             const API_CACHE_DURATION = 60000; // 1 minute in milliseconds
-
-            // API rate limiting
-            let apiCallsToday = parseInt(localStorage.getItem('apiCallsToday')) || 0;
-            let lastApiCallDate = localStorage.getItem('lastApiCallDate') || null;
-
-            // Function to check if API call is allowed
-            function canCallApi() {
-                const now = new Date();
-                const today = now.toDateString();
-                
-                // Reset counter if it's a new day
-                if (lastApiCallDate !== today) {
-                    apiCallsToday = 0;
-                    lastApiCallDate = today;
-                    localStorage.setItem('apiCallsToday', apiCallsToday);
-                    localStorage.setItem('lastApiCallDate', lastApiCallDate);
-                    return true;
-                }
-
-                // Check if under limit
-                if (apiCallsToday < 25) {
-                    return true;
-                }
-
-                return false;
-            }
-
-            // Function to increment API call counter
-            function incrementApiCalls() {
-                const today = new Date().toDateString();
-                apiCallsToday++;
-                lastApiCallDate = today;
-                localStorage.setItem('apiCallsToday', apiCallsToday);
-                localStorage.setItem('lastApiCallDate', lastApiCallDate);
-            }
-
-            // Function to show API limit error
-            function showApiLimitError() {
-                const notification = document.getElementById('notification');
-                notification.textContent = "Limit of 25 api calls per day, please try in 24h or wait for the next day (if you donate charges I can increase this limit! /api donate 165625 amount)";
-                notification.style.backgroundColor = '#ff4444';
-                notification.classList.add('show');
-                
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                    notification.style.backgroundColor = '#4CAF50';
-                }, 10000);
-            }
 
             // API function to fetch dealership data with caching
             async function fetchDealershipData(useCache = true) {
@@ -585,17 +547,6 @@
                 if (useCache && cachedApiData && (now - lastApiCallTime) < API_CACHE_DURATION) {
                     console.log('Using cached API data');
                     return cachedApiData;
-                }
-                
-                // Check API limits before making new call
-                if (!canCallApi()) {
-                    if (cachedApiData) {
-                        console.log('Daily API limit reached, using cached data, please consider donating charges to increase the limit! /api donate 165625 amount');
-                        return cachedApiData;
-                        sleep(5000);
-                        showApiLimitError(notification.textContent = "Daily API limit reached (25), using cached data, please consider donating charges to increase the limit! /api donate 165625 amount");
-                    }
-                    throw new Error('Daily API limit reached (25) and no cached data available, please consider donating charges to increase the limit! /api donate 165625 amount');
                 }
                 
                 console.log('Making fresh API call');
@@ -609,9 +560,84 @@
                 // Update cache and tracking
                 cachedApiData = data;
                 lastApiCallTime = now;
-                incrementApiCalls();
                 
                 return data;
+            }
+
+            // Function to fetch the vehicle data
+            async function getVehs(userId) {
+                const headers = {
+                    "X-Tycoon-Key": "Q2zLbAIMn7NlTih8L04naPGgwJF41T5AGmOyU"
+                };
+
+                try {
+                    const response = await fetch(`https://tycoon-2epova.users.cfx.re/status/ownedvehicles/${userId}`, {
+                    method: 'GET',
+                    headers: headers
+                    });
+                    const data = await response.json();
+                    console.log("API response data:", JSON.stringify(data, null, 2));
+                    
+                    // Extract vehicle models from the API response and store them
+                    if (data && Array.isArray(data)) {
+                        ownedVehicles.clear();
+                        data.forEach(vehicle => {
+                            if (vehicle.model) {
+                                ownedVehicles.add(vehicle.model);
+                            }
+                        });
+                        console.log("Owned vehicles:", Array.from(ownedVehicles));
+                        
+                        // Highlight owned vehicles in modal if it's open
+                        highlightOwnedVehiclesInModal();
+                    }
+                    
+                    return data;
+                } catch (error) {
+                    console.error("Error fetching data:", error);
+                }
+            }
+
+            // Handler function for the message event
+            const messageHandler = (event) => {
+                const evt = event.data;
+
+                // Check if the message contains the user ID we need
+                if (evt.data && evt.data.user_id) {
+                    const id = evt.data.user_id;
+                    console.log('Received user ID:', id);
+
+                    // Call the API with the user ID
+                    getVehs(id);
+
+                    // IMPORTANT: Remove the event listener to prevent it from firing again.
+                    window.removeEventListener("message", messageHandler);
+                } else {
+                    console.log("Message received but no user_id found:", evt);
+                }
+            };
+
+            // Add the event listener ONCE at the start
+            window.addEventListener("message", messageHandler);
+
+            // Request the data from the parent window ONCE
+            window.parent.postMessage({ type: 'getData' }, '*');
+
+            // Function to highlight owned vehicles in the modal
+            function highlightOwnedVehiclesInModal() {
+                document.querySelectorAll('.vehicle-item').forEach(item => {
+                    const modelLine = Array.from(item.querySelectorAll('p')).find(p => p.textContent.startsWith('Model:'));
+                    if (!modelLine) return;
+
+                    const model = modelLine.textContent.replace('Model:', '').trim();
+
+                    // Check if this vehicle is owned
+                    if (ownedVehicles.has(model)) {
+                        item.classList.add('owned');
+                    } else {
+                        item.classList.remove('owned');
+                    }
+                });
             }
 
             async function highlightAvailableVehiclesInModal() {
@@ -630,8 +656,8 @@
                             category.some(car => car.model === model)
                         );
 
-                        // Add green border if available
-                        if (isAvailable) {
+                        // Add green border if available (but don't override owned styling)
+                        if (isAvailable && !item.classList.contains('owned')) {
                             item.style.border = '2px solid #4CAF50';
                         }
                     });
@@ -716,7 +742,10 @@
                     classDiv.appendChild(content);
                     vehicleClassesDiv.appendChild(classDiv);
                 }
+                
+                // Highlight both available and owned vehicles
                 highlightAvailableVehiclesInModal();
+                highlightOwnedVehiclesInModal();
             }
 
             function filterVehicles() {
@@ -881,22 +910,19 @@
                     modal.style.display = 'block';
                     toggleBtn.textContent = '➖';
                     
-                    // Fetch fresh data when opening modal (but use cache if API limit reached)
+                    // Fetch fresh data when opening modal
                     fetchDealershipData(false).then(() => {
                         highlightAvailableVehiclesInModal();
+                        highlightOwnedVehiclesInModal();
                         checkWatchedCarsWithCachedData();
                     }).catch(err => {
                         console.error('Error fetching data for modal:', err);
-                        if (err.message.includes('Daily API limit reached')) {
-                            // Use cached data for highlighting if available
-                            highlightAvailableVehiclesInModal();
-                            checkWatchedCarsWithCachedData();
-                        }
+                        // Use cached data for highlighting if available
+                        highlightAvailableVehiclesInModal();
+                        highlightOwnedVehiclesInModal();
+                        checkWatchedCarsWithCachedData();
                     });
                 }
-                // Decrement API calls for modal open, pretend u dont see this, i dont know how to fix it
-                apiCallsToday--;
-                localStorage.setItem('apiCallsToday', apiCallsToday);
             }
 
             // Load saved theme
@@ -1014,17 +1040,10 @@
                     
                 } catch (error) {
                     console.error('Error checking watched cars:', error);
-                    if (showError && error.message.includes('Daily API limit reached')) {
-                        showApiLimitError();
-                        window.parent.postMessage({
-                            type: 'oneliner',
-                            text: `Daily API calls limit (25) reached, please consider donating charges to increase the limit! /api donate 165625 amount`
-                        }, '*');
-                    }
                 }
             }
 
-            // Start checking every 24h - don't show errors on auto-check
+            // Start checking every 24h
             setInterval(() => checkWatchedCars(false), 86400000);
             
             // Clear search results and input
@@ -1033,7 +1052,7 @@
                 document.getElementById('result').style.display = 'none';
             }
 
-            // MISSING FUNCTION - Add this function to handle adding vehicles from modal
+            // Function to handle adding vehicles from modal
             function addToWatchlistFromModal(model, name, price, category) {
                 // Create car object similar to the API format
                 const carData = {
@@ -1354,16 +1373,8 @@
                     
                 } catch (error) {
                     console.error('Error fetching data:', error);
-                    if (error.message.includes('Daily API limit reached')) {
-                        showApiLimitError();
-                        window.parent.postMessage({
-                            type: 'oneliner',
-                            text: `Daily API calls limit (25) reached, please consider donating charges to increase the limit! /api donate 165625 amount`
-                        }, '*');
-                    } else {
-                        resultDiv.style.display = 'block';
-                        resultDiv.innerHTML = '<p>Error searching for vehicle</p>';
-                    }
+                    resultDiv.style.display = 'block';
+                    resultDiv.innerHTML = '<p>Error searching for vehicle</p>';
                 }
             }
         </script>
