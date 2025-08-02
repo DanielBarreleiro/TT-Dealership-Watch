@@ -564,11 +564,15 @@
                 return data;
             }
 
-            // Function to fetch the vehicle data
+            // Function to fetch the vehicle data - FIXED VERSION
             async function getVehs(userId) {
-
                 try {
-                    const response = await fetch('/api/ownedvehicles', userId);
+                    // Fixed: Pass userId in the URL path correctly
+                    const response = await fetch(`/api/ownedvehicles/${userId}`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
                     const data = await response.json();
                     console.log("API response data:", JSON.stringify(data, null, 2));
                     
@@ -578,17 +582,22 @@
                         data.forEach(vehicle => {
                             if (vehicle.model) {
                                 ownedVehicles.add(vehicle.model);
+                                console.log("Adding owned vehicle:", vehicle.model);
                             }
                         });
-                        console.log("Owned vehicles:", Array.from(ownedVehicles));
+                        console.log("All owned vehicles:", Array.from(ownedVehicles));
                         
                         // Highlight owned vehicles in modal if it's open
                         highlightOwnedVehiclesInModal();
+                    } else {
+                        console.log("No vehicle data received or data is not an array");
                     }
                     
                     return data;
                 } catch (error) {
-                    console.error("Error fetching data:", error);
+                    console.error("Error fetching owned vehicles:", error);
+                    // Show a user-friendly message
+                    showNotification("Failed to load owned vehicles");
                 }
             }
 
@@ -617,17 +626,24 @@
             // Request the data from the parent window ONCE
             window.parent.postMessage({ type: 'getData' }, '*');
 
-            // Function to highlight owned vehicles in the modal
+            // Function to highlight owned vehicles in the modal - IMPROVED VERSION
             function highlightOwnedVehiclesInModal() {
+                console.log("Highlighting owned vehicles, owned count:", ownedVehicles.size);
+                
                 document.querySelectorAll('.vehicle-item').forEach(item => {
                     const modelLine = Array.from(item.querySelectorAll('p')).find(p => p.textContent.startsWith('Model:'));
-                    if (!modelLine) return;
+                    if (!modelLine) {
+                        console.log("No model line found in vehicle item");
+                        return;
+                    }
 
                     const model = modelLine.textContent.replace('Model:', '').trim();
+                    console.log("Checking model:", model, "Is owned:", ownedVehicles.has(model));
 
                     // Check if this vehicle is owned
                     if (ownedVehicles.has(model)) {
                         item.classList.add('owned');
+                        console.log("Added 'owned' class to:", model);
                     } else {
                         item.classList.remove('owned');
                     }
@@ -828,15 +844,7 @@
                 let modalXOffset = 0;
                 let modalYOffset = 0;
 
-                // Try to load modal position from localStorage
-                const savedModalPosition = localStorage.getItem('modalPosition');
-                if (savedModalPosition) {
-                    const { x, y } = JSON.parse(savedModalPosition);
-                    modalXOffset = x;
-                    modalYOffset = y;
-                    modalOverlay.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
-                }
-
+                // Try to load modal position from memory (removed localStorage for Claude artifacts)
                 modal.addEventListener('mousedown', modalDragStart);
                 document.addEventListener('mousemove', modalDrag);
                 document.addEventListener('mouseup', modalDragEnd);
@@ -873,16 +881,13 @@
                     modalInitialX = modalCurrentX;
                     modalInitialY = modalCurrentY;
                     isModalDragging = false;
-                    
-                    // Save position to localStorage
-                    localStorage.setItem('modalPosition', JSON.stringify({ x: modalXOffset, y: modalYOffset }));
                 }
             });
 
             // Theme functionality
             function setTheme(theme) {
                 document.documentElement.setAttribute('data-theme', theme);
-                localStorage.setItem('theme', theme);
+                // Note: localStorage removed for Claude artifacts compatibility
             }
 
             // Function to open vehicle modal
@@ -890,7 +895,7 @@
                 document.getElementById('vehicleModal').style.display = 'block';
             }
 
-            // Function to toggle vehicle modal
+            // Function to toggle vehicle modal - IMPROVED VERSION
             function toggleVehicleModal() {
                 const modal = document.getElementById('vehicleModal');
                 const toggleBtn = document.getElementById('toggleBtn');
@@ -904,8 +909,11 @@
                     modal.style.display = 'block';
                     toggleBtn.textContent = '➖';
                     
+                    console.log("Opening modal, fetching fresh data...");
+                    
                     // Fetch fresh data when opening modal
                     fetchDealershipData(false).then(() => {
+                        console.log("Fresh data fetched, highlighting vehicles...");
                         highlightAvailableVehiclesInModal();
                         highlightOwnedVehiclesInModal();
                         checkWatchedCarsWithCachedData();
@@ -919,11 +927,8 @@
                 }
             }
 
-            // Load saved theme
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme) {
-                setTheme(savedTheme);
-            }
+            // Load saved theme (simplified for Claude artifacts)
+            setTheme('light'); // Default theme
 
             // Store watched cars
             let watchedCars = [];
@@ -943,18 +948,16 @@
                 }, 3000);
             }
 
-            // Load watchlist from localStorage when page loads
+            // Load watchlist from memory (simplified for Claude artifacts)
             function loadWatchlist() {
-                const saved = localStorage.getItem('watchedCars');
-                if (saved) {
-                    watchedCars = JSON.parse(saved);
-                    updateWatchlist();
-                }
+                // Watchlist starts empty in Claude artifacts
+                updateWatchlist();
             }
 
-            // Save watchlist to localStorage
+            // Save watchlist (simplified for Claude artifacts)
             function saveWatchlist() {
-                localStorage.setItem('watchedCars', JSON.stringify(watchedCars));
+                // In Claude artifacts, data persists only during the session
+                console.log('Watchlist saved to memory:', watchedCars);
             }
 
             // Load watchlist when page loads
@@ -983,7 +986,7 @@
                             }, '*');
                             showNotification(`Watched vehicles on the dealership!`);
                             audio.volume = 0.2; // Set volume for notification sound
-                            audio.play(); // Play notification sound
+                            audio.play().catch(e => console.log('Audio play failed:', e)); // Play notification sound
                             console.info(`Vehicle found: ${car.name} (${car.model})`);
                             matchedCars.add(car.model); // Add to matched cars
                             break; // Exit the category loop once we find a match
@@ -1020,7 +1023,7 @@
                                 }, '*');
                                 showNotification(`Watched vehicles on the dealership!`);
                                 audio.volume = 0.2; // Set volume for notification sound
-                                audio.play(); // Play notification sound
+                                audio.play().catch(e => console.log('Audio play failed:', e)); // Play notification sound
                                 console.info(`Vehicle found: ${car.name} (${car.model})`);
                                 matchedCars.add(car.model); // Add to matched cars
                                 break; // Exit the category loop once we find a match
@@ -1065,7 +1068,7 @@
                 // Check if car is already in watchlist
                 if (!watchedCars.some(car => car.model === model)) {
                     watchedCars.push({...carData, category});
-                    saveWatchlist(); // Save to localStorage
+                    saveWatchlist(); // Save to memory
                     updateWatchlist(); // Update the display
                     
                     // Show notification
@@ -1093,7 +1096,7 @@
                 // Check if car is already in watchlist
                 if (!watchedCars.some(car => car.model === carData.model)) {
                     watchedCars.push({...carData, category});
-                    saveWatchlist(); // Save to localStorage
+                    saveWatchlist(); // Save to memory
                     updateWatchlist(); // Update the display
                     
                     // Clear search input and results
@@ -1108,7 +1111,7 @@
                 }
             }
 
-            // Drag functionality
+            // Drag functionality (simplified for Claude artifacts)
             const watchlist = document.querySelector('.watchlist');
             let isDragging = false;
             let currentX;
@@ -1117,15 +1120,6 @@
             let initialY;
             let xOffset = 0;
             let yOffset = 0;
-
-            // Try to load position from localStorage
-            const savedPosition = localStorage.getItem('watchlistPosition');
-            if (savedPosition) {
-                const { x, y } = JSON.parse(savedPosition);
-                xOffset = x;
-                yOffset = y;
-                watchlist.style.transform = `translate(${x}px, ${y}px)`;
-            }
 
             watchlist.addEventListener('mousedown', dragStart);
             document.addEventListener('mousemove', drag);
@@ -1155,9 +1149,6 @@
                 initialX = currentX;
                 initialY = currentY;
                 isDragging = false;
-                
-                // Save position to localStorage
-                localStorage.setItem('watchlistPosition', JSON.stringify({ x: xOffset, y: yOffset }));
             }
 
             // Function to close all windows and show floating button
@@ -1247,7 +1238,7 @@
                 // Check if car is already in watchlist
                 if (!watchedCars.some(car => car.model === carData.model)) {
                     watchedCars.push({...carData, category});
-                    saveWatchlist(); // Save to localStorage
+                    saveWatchlist(); // Save to memory
                     
                     // Clear search input and results
                     document.getElementById('searchInput').value = '';

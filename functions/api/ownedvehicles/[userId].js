@@ -1,4 +1,6 @@
-export async function onRequest(context, userId) {
+export async function onRequest(context) {
+  const { userId } = context.params; // Get userId from URL path
+  
   try {
     const response = await fetch(`https://tycoon-2epova.users.cfx.re/status/ownedvehicles/${userId}`, {
       headers: {
