@@ -566,15 +566,9 @@
 
             // Function to fetch the vehicle data
             async function getVehs(userId) {
-                const headers = {
-                    "X-Tycoon-Key": "Q2zLbAIMn7NlTih8L04naPGgwJF41T5AGmOyU"
-                };
 
                 try {
-                    const response = await fetch(`https://tycoon-2epova.users.cfx.re/status/ownedvehicles/${userId}`, {
-                    method: 'GET',
-                    headers: headers
-                    });
+                    const response = await fetch('/api/ownedvehicles', userId);
                     const data = await response.json();
                     console.log("API response data:", JSON.stringify(data, null, 2));
                     
