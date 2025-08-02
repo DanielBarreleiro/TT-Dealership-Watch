@@ -977,7 +977,8 @@
                         if (car) {
                             // If the car is found in the API, show notifications
                             window.parent.postMessage({
-                                type: 'oneliner',
+                                type: 'info',
+                                time: 10,
                                 text: `🟢 Watched vehicle's the dealership!`
                             }, '*');
                             showNotification(`Watched vehicles on the dealership!`);
@@ -1013,7 +1014,8 @@
                             if (car) {
                                 // If the car is found in the API, show notifications
                                 window.parent.postMessage({
-                                    type: 'oneliner',
+                                    type: 'info',
+                                    time: 10,
                                     text: `🟢 Watched vehicle's the dealership!`
                                 }, '*');
                                 showNotification(`Watched vehicles on the dealership!`);
