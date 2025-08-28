@@ -21,6 +21,11 @@
             "price": 1000000
         },
         {
+            "name": "Insurgent Custom",
+            "model": "insurgent3",
+            "price": 2000000
+        },
+        {
             "name": "Armoured Kuruma",
             "model": "kuruma2",
             "price": 1000000000
@@ -43,7 +48,12 @@
         {
             "name": "Oppressor MK2",
             "model": "oppressor2",
-            "price": 100000000000.0
+            "price": 100000000000
+        },
+        {
+            "name": "Patriot Stretch",
+            "model": "patriot2",
+            "price": 500000
         },
         {
             "name": "Deluxo GT",
@@ -52,6 +62,11 @@
         }
     ],
     "Special": [
+        {
+            "name": "Space Docker",
+            "model": "dune2",
+            "price": 0
+        },
         {
             "name": "Issi Sport",
             "model": "issi7",
@@ -78,14 +93,54 @@
             "price": 1000000000
         },
         {
+            "name": "Sugoi",
+            "model": "sugoi",
+            "price": 83422852
+        },
+        {
             "name": "Everon",
             "model": "everon",
             "price": 34052734
         },
         {
+            "name": "Emerus",
+            "model": "emerus",
+            "price": 56439209
+        },
+        {
+            "name": "Furia",
+            "model": "furia",
+            "price": 51871643
+        },
+        {
+            "name": "Gauntlet Classic",
+            "model": "gauntlet3",
+            "price": 45000000
+        },
+        {
+            "name": "Imorgon",
+            "model": "imorgon",
+            "price": 80070801
+        },
+        {
+            "name": "Novak",
+            "model": "novak",
+            "price": 10000000
+        },
+        {
+            "name": "Outlaw",
+            "model": "outlaw",
+            "price": 64348145
+        },
+        {
             "name": "V-STR",
             "model": "vstr",
             "price": 25227050
+        },
+        {
+            "name": "Kanjo",
+            "model": "kanjo",
+            "price": 35254822
         },
         {
             "name": "Komoda",
@@ -96,6 +151,11 @@
             "name": "Seismic Wastelander",
             "model": "wlseismic",
             "price": 0
+        },
+        {
+            "name": "Sherp",
+            "model": "zhaba",
+            "price": 8184082032
         }
     ],
     "Supercars": [
@@ -120,6 +180,21 @@
             "price": 800000
         },
         {
+            "name": "Exoskeleton",
+            "model": "exoskeleton",
+            "price": 500000000
+        },
+        {
+            "name": "Entity XF",
+            "model": "entityxf",
+            "price": 795000
+        },
+        {
+            "name": "GP1",
+            "model": "gp1",
+            "price": 1650000
+        },
+        {
             "name": "RE-7B",
             "model": "le7b",
             "price": 2475000
@@ -128,6 +203,11 @@
             "name": "Nero",
             "model": "nero",
             "price": 2150000
+        },
+        {
+            "name": "Nero Custom",
+            "model": "nero2",
+            "price": 2500000
         },
         {
             "name": "X80 Proto",
@@ -140,9 +220,34 @@
             "price": 775000
         },
         {
+            "name": "Progen Itali GT",
+            "model": "italigtb2",
+            "price": 1500000
+        },
+        {
+            "name": "Taipan",
+            "model": "taipan",
+            "price": 3100000
+        },
+        {
+            "name": "Tezeract",
+            "model": "tezeract",
+            "price": 3200000
+        },
+        {
             "name": "Turismo",
             "model": "turismo2",
             "price": 575000
+        },
+        {
+            "name": "Turismo R",
+            "model": "turismor",
+            "price": 500000
+        },
+        {
+            "name": "Voltic",
+            "model": "voltic",
+            "price": 170000
         },
         {
             "name": "XA21",
@@ -152,6 +257,16 @@
     ],
     "Sports": [
         {
+            "name": "Banshee",
+            "model": "banshee",
+            "price": 115000
+        },
+        {
+            "model": "buffalo",
+            "price": 45000,
+            "name": "Buffalo"
+        },
+        {
             "name": "Buffalo S",
             "model": "buffalo2",
             "price": 96000
@@ -160,6 +275,11 @@
             "name": "Buffalo RS",
             "model": "buffalo3",
             "price": 196000
+        },
+        {
+            "name": "Comet",
+            "model": "comet2",
+            "price": 140000
         },
         {
             "name": "Comet Offroad",
@@ -182,9 +302,24 @@
             "price": 200000
         },
         {
+            "name": "Fusilade",
+            "model": "fusilade",
+            "price": 36000
+        },
+        {
+            "name": "Furore GT",
+            "model": "furoregt",
+            "price": 500000
+        },
+        {
             "name": "Khamelion",
             "model": "khamelion",
             "price": 155000
+        },
+        {
+            "name": "Omnis",
+            "model": "omnis",
+            "price": 1700000
         },
         {
             "name": "Penumbra",
@@ -192,14 +327,59 @@
             "price": 24000
         },
         {
+            "name": "Raiden",
+            "model": "raiden",
+            "price": 450000
+        },
+        {
             "name": "Raptor",
             "model": "raptor",
             "price": 100000
         },
         {
+            "model": "seven70",
+            "price": 225000,
+            "name": "Seven 70"
+        },
+        {
+            "model": "specter",
+            "price": 125000,
+            "name": "Specter"
+        },
+        {
+            "name": "Schafter V12",
+            "model": "schafter3",
+            "price": 140000
+        },
+        {
             "name": "Schafter Extended",
             "model": "schafter4",
             "price": 150000
+        },
+        {
+            "name": "Schafter Armored",
+            "model": "schafter5",
+            "price": 270000
+        },
+        {
+            "name": "Schafter Armored Extended",
+            "model": "schafter6",
+            "price": 280000
+        },
+        {
+            "name": "Schwartzer",
+            "model": "schwarzer",
+            "price": 100000
+        },
+        {
+            "name": "Sentinel",
+            "model": "sentinel3",
+            "price": 250000
+        },
+        {
+            "name": "Sultan",
+            "model": "sultan",
+            "price": 25000
         },
         {
             "name": "Cypher",
@@ -209,9 +389,24 @@
     ],
     "Offroad": [
         {
+            "name": "BF Injection",
+            "model": "bfinjection",
+            "price": 15000
+        },
+        {
+            "name": "Bifta",
+            "model": "bifta",
+            "price": 5000
+        },
+        {
             "name": "Blazer",
             "model": "blazer",
             "price": 500
+        },
+        {
+            "name": "Blazer Hunter",
+            "model": "blazer2",
+            "price": 1000
         },
         {
             "name": "Blazer HotRod",
@@ -224,14 +419,44 @@
             "price": 25000
         },
         {
+            "name": "Brawler",
+            "model": "brawler",
+            "price": 300000
+        },
+        {
+            "name": "Dune Buggy",
+            "model": "dune",
+            "price": 15000
+        },
+        {
             "name": "Duneloader",
             "model": "dloader",
             "price": 10000
         },
         {
+            "name": "Guardian (Industrial)",
+            "model": "guardian",
+            "price": 20000
+        },
+        {
+            "name": "Liberator",
+            "model": "monster",
+            "price": 15000000
+        },
+        {
+            "name": "Trophy Truck",
+            "model": "trophytruck",
+            "price": 2000000
+        },
+        {
             "name": "Trophy Truck Closed",
             "model": "trophytruck2",
             "price": 2500000
+        },
+        {
+            "name": "Kalahari",
+            "model": "kalahari",
+            "price": 6000
         },
         {
             "name": "Kamacho",
@@ -266,7 +491,7 @@
             "price": 100000
         },
         {
-            "name": "BF400",
+            "name": "BF 400",
             "model": "bf400",
             "price": 35000
         },
@@ -279,6 +504,16 @@
             "name": "Carbon RS",
             "model": "carbonrs",
             "price": 65000
+        },
+        {
+            "name": "Daemon",
+            "model": "daemon",
+            "price": 35000
+        },
+        {
+            "model": "defiler",
+            "price": 65000,
+            "name": "Defiler"
         },
         {
             "name": "Diablous",
@@ -296,9 +531,29 @@
             "price": 25000
         },
         {
+            "model": "faggio",
+            "price": 15000,
+            "name": "Faggio"
+        },
+        {
+            "model": "fcr",
+            "price": 50000,
+            "name": "FCR 1000"
+        },
+        {
+            "model": "fcr2",
+            "price": 65000,
+            "name": "FCR 1000 Custom"
+        },
+        {
             "name": "Hakuchou",
             "model": "hakuchou",
             "price": 70000
+        },
+        {
+            "model": "hakuchou2",
+            "price": 90000,
+            "name": "Hakuchou Drag"
         },
         {
             "model": "hexer",
@@ -316,26 +571,79 @@
             "price": 200000
         },
         {
+            "model": "sanchez2",
+            "price": 12000,
+            "name": "Sanchez Custom"
+        },
+        {
             "name": "Shotaro",
             "model": "shotaro",
             "price": 1000000
         },
         {
+            "model": "manchez",
+            "days_left": 0,
+            "price": 200000,
+            "name": "Manchez"
+        },
+        {
+            "model": "sovereign",
+            "days_left": 0,
+            "price": 33500,
+            "name": "Sovereign"
+        },
+        {
+            "model": "vindicator",
+            "days_left": 1,
+            "price": 65000,
+            "name": "vindicator"
+        },
+        {
             "name": "Thrust",
             "model": "thrust",
             "price": 60000
+        },
+        {
+            "model": "zombieb",
+            "price": 45000,
+            "name": "Zombie"
         }
     ],
     "Coupes": [
+        {
+            "model": "cogcabrio",
+            "price": 100000,
+            "name": "Cognoscenti Cabrio"
+        },
         {
             "name": "F620",
             "model": "f620",
             "price": 180000
         },
         {
+            "model": "felon",
+            "price": 90000,
+            "name": "Felon"
+        },
+        {
             "name": "Felon GT",
             "model": "felon2",
             "price": 95000
+        },
+        {
+            "name": "Jackal",
+            "model": "jackal",
+            "price": 65000
+        },
+        {
+            "name": "Oracle",
+            "model": "oracle",
+            "price": 60000
+        },
+        {
+            "name": "Oracle XS",
+            "model": "oracle2",
+            "price": 75000
         },
         {
             "name": "Sentinel",
@@ -360,9 +668,29 @@
     ],
     "Compacts": [
         {
+            "name": "Blista 2014",
+            "model": "blista",
+            "price": 42000
+        },
+        {
+            "name": "Dilettante",
+            "model": "dilettante",
+            "price": 39999
+        },
+        {
+            "name": "Issi",
+            "model": "issi2",
+            "price": 20000
+        },
+        {
             "name": "Issi Classic",
             "model": "issi3",
             "price": 20000
+        },
+        {
+            "name": "Prairie",
+            "model": "prairie",
+            "price": 15000
         },
         {
             "name": "Rhapsody",
@@ -387,9 +715,39 @@
             "price": 60000
         },
         {
+            "name": "Baller Exec Edition",
+            "model": "baller3",
+            "price": 90000
+        },
+        {
+            "name": "Baller Exec Edition Extended",
+            "model": "baller4",
+            "price": 100000
+        },
+        {
+            "name": "Baller Armored",
+            "model": "baller5",
+            "price": 120000
+        },
+        {
             "name": "Dubsta Old",
             "model": "dubsta",
             "price": 75000
+        },
+        {
+            "name": "Dubsta OffRoad",
+            "model": "dubsta3",
+            "price": 335000
+        },
+        {
+            "name": "Fathom FQ",
+            "model": "fq2",
+            "price": 110000
+        },
+        {
+            "name": "Habanero",
+            "model": "habanero",
+            "price": 30000
         },
         {
             "name": "Huntley S",
@@ -402,9 +760,24 @@
             "price": 58000
         },
         {
+            "name": "Patriot",
+            "model": "patriot",
+            "price": 65000
+        },
+        {
             "name": "Radius",
             "model": "radi",
             "price": 32000
+        },
+        {
+            "name": "Rocoto",
+            "model": "rocoto",
+            "price": 85000
+        },
+        {
+            "model": "toros",
+            "price": 350000,
+            "name": "Pegassi Toros"
         },
         {
             "name": "XLS",
@@ -419,6 +792,31 @@
     ],
     "Sport Classics": [
         {
+            "name": "Casco",
+            "model": "casco",
+            "price": 1380000
+        },
+        {
+            "name": "Cheburek",
+            "model": "cheburek",
+            "price": 1000000
+        },
+        {
+            "name": "Coquette Classic",
+            "model": "coquette2",
+            "price": 665000
+        },
+        {
+            "name": "Fagaloa",
+            "model": "fagaloa",
+            "price": 1000000
+        },
+        {
+            "name": "GT-500",
+            "model": "gt500",
+            "price": 1000000
+        },
+        {
             "name": "Roosevelt",
             "model": "btype",
             "price": 2000000
@@ -429,9 +827,34 @@
             "price": 535000
         },
         {
+            "model": "jester3",
+            "price": 750000,
+            "name": "Jester Classic"
+        },
+        {
+            "name": "RapidGT3",
+            "model": "rapidgt3",
+            "price": 120000
+        },
+        {
             "name": "Retinue",
             "model": "retinue",
             "price": 100000
+        },
+        {
+            "name": "Savestra",
+            "model": "savestra",
+            "price": 150000
+        },
+        {
+            "name": "Stinger",
+            "model": "stinger",
+            "price": 850000
+        },
+        {
+            "name": "Stinger GT",
+            "model": "stingergt",
+            "price": 890000
         },
         {
             "name": "Stirling GT",
@@ -442,6 +865,11 @@
             "name": "Torero",
             "model": "torero",
             "price": 675000
+        },
+        {
+            "name": "Tornado",
+            "model": "tornado",
+            "price": 45000
         },
         {
             "name": "Tornado",
@@ -459,12 +887,47 @@
             "price": 1200000
         },
         {
+            "name": "Z190",
+            "model": "z190",
+            "price": 1000000
+        },
+        {
             "name": "Z-Type",
             "model": "ztype",
             "price": 1000000
         }
     ],
     "Lowriders": [
+        {
+            "name": "Buccaneer Custom",
+            "model": "buccaneer2",
+            "price": 55000
+        },
+        {
+            "name": "Chino Custom",
+            "model": "chino2",
+            "price": 175000
+        },
+        {
+            "name": "Faction Custom",
+            "model": "faction2",
+            "price": 55000
+        },
+        {
+            "name": "Faction Custom Lifted",
+            "model": "faction3",
+            "price": 360000
+        },
+        {
+            "name": "Hermes",
+            "model": "hermes",
+            "price": 200000
+        },
+        {
+            "name": "Minivan Custom",
+            "model": "minivan2",
+            "price": 600000
+        },
         {
             "name": "Moonbean Custom",
             "model": "moonbeam2",
@@ -474,6 +937,11 @@
             "name": "SabreGT Custom",
             "model": "sabregt2",
             "price": 180000
+        },
+        {
+            "name": "Virgo Custom",
+            "model": "virgo2",
+            "price": 175000
         },
         {
             "name": "Voodoo Custom",
@@ -493,9 +961,34 @@
     ],
     "Sedans": [
         {
+            "name": "Cognoscenti",
+            "model": "cognoscenti",
+            "price": 55000
+        },
+        {
+            "name": "Cognoscenti (Armored)",
+            "model": "cognoscenti2",
+            "price": 100000
+        },
+        {
             "name": "Cognoscenti 55 (Armored)",
             "model": "cog552",
             "price": 100000
+        },
+        {
+            "name": "Cognoscenti 55",
+            "model": "cog55",
+            "price": 55000
+        },
+        {
+            "name": "Emperor",
+            "model": "emperor",
+            "price": 15000
+        },
+        {
+            "name": "Emperor",
+            "model": "emperor2",
+            "price": 5000
         },
         {
             "name": "Fugitive",
@@ -511,6 +1004,11 @@
             "name": "Premier",
             "model": "premier",
             "price": 10000
+        },
+        {
+            "name": "Primo",
+            "model": "primo",
+            "price": 9000
         },
         {
             "name": "Regina",
@@ -531,6 +1029,26 @@
             "name": "Stratum",
             "model": "stratum",
             "price": 10000
+        },
+        {
+            "name": "Stretch",
+            "model": "stretch",
+            "price": 30000
+        },
+        {
+            "name": "Surge",
+            "model": "surge",
+            "price": 38000
+        },
+        {
+            "name": "Tailgater",
+            "model": "tailgater",
+            "price": 55000
+        },
+        {
+            "model": "taxi",
+            "price": 11000,
+            "name": "Taxi"
         },
         {
             "name": "Warrener",
@@ -555,9 +1073,24 @@
             "price": 7500
         },
         {
+            "name": "Bobcat XL",
+            "model": "bobcatxl",
+            "price": 8000
+        },
+        {
+            "name": "Gang Burrito",
+            "model": "gburrito",
+            "price": 70000
+        },
+        {
             "name": "Gang Burrito 2",
             "model": "gburrito2",
             "price": 70000
+        },
+        {
+            "name": "Minivan",
+            "model": "minivan",
+            "price": 30000
         },
         {
             "name": "Paradise",
@@ -570,9 +1103,29 @@
             "price": 16000
         },
         {
+            "name": "Youga Classic",
+            "model": "youga2",
+            "price": 10000
+        },
+        {
+            "name": "Rumpo Custom",
+            "model": "rumpo3",
+            "price": 15000
+        },
+        {
+            "name": "Speedo",
+            "model": "speedo",
+            "price": 20000
+        },
+        {
             "model": "surfer",
             "name": "Surfer",
             "price": 11000
+        },
+        {
+            "name": "Surfer",
+            "model": "surfer2",
+            "price": 5000
         },
         {
             "name": "News Speedo Express",
@@ -585,6 +1138,21 @@
             "name": "Buccaneer",
             "model": "buccaneer",
             "price": 29000
+        },
+        {
+            "name": "Vapid Clique",
+            "model": "clique",
+            "price": 500000
+        },
+        {
+            "name": "Chino",
+            "model": "chino",
+            "price": 125000
+        },
+        {
+            "name": "Coquette BlackFin",
+            "model": "coquette3",
+            "price": 695000
         },
         {
             "name": "Declasse Vamos",
@@ -602,6 +1170,11 @@
             "price": 600000
         },
         {
+            "name": "Dukes",
+            "model": "dukes",
+            "price": 90000
+        },
+        {
             "name": "Dukes Armored",
             "model": "dukes2",
             "price": 150000
@@ -610,6 +1183,21 @@
             "name": "Ellie",
             "model": "ellie",
             "price": 400000
+        },
+        {
+            "name": "Faction",
+            "model": "faction",
+            "price": 36000
+        },
+        {
+            "name": "Gauntlet",
+            "model": "gauntlet",
+            "price": 32000
+        },
+        {
+            "name": "Hotknife",
+            "model": "hotknife",
+            "price": 90000
         },
         {
             "name": "Moonbeam",
@@ -622,17 +1210,42 @@
             "price": 15000
         },
         {
+            "name": "Sabre Turbo",
+            "model": "sabregt",
+            "price": 45000
+        },
+        {
+            "name": "Slamvan",
+            "model": "slamvan",
+            "price": 30000
+        },
+        {
+            "name": "Slamvan w/Cover",
+            "model": "slamvan2",
+            "price": 30500
+        },
+        {
+            "name": "Declasse Tulip",
+            "model": "tulip",
+            "price": 350000
+        },
+        {
             "name": "Vigero",
             "model": "vigero",
             "price": 65000
+        },
+        {
+            "name": "Virgo Retro",
+            "model": "virgo3",
+            "price": 75000
+        },
+        {
+            "name": "Voodoo",
+            "model": "voodoo2",
+            "price": 4000
         }
     ],
     "Non-classified (for now)": [
-        {
-            "name": "190z",
-            "model": "z190",
-            "price": 1000000
-        },
         {
             "name": "811",
             "model": "pfister811",
@@ -674,29 +1287,9 @@
             "price": 2600000
         },
         {
-            "name": "Baller LE",
-            "model": "baller3",
-            "price": 90000
-        },
-        {
-            "name": "Baller LE (Armored)",
-            "model": "baller5",
-            "price": 120000
-        },
-        {
-            "name": "Baller LE LWB",
-            "model": "baller4",
-            "price": 100000
-        },
-        {
             "name": "Baller LE LWB (Armored)",
             "model": "baller6",
             "price": 130000
-        },
-        {
-            "name": "Banshee",
-            "model": "banshee",
-            "price": 115000
         },
         {
             "name": "Banshee 900R",
@@ -709,11 +1302,6 @@
             "price": 610000
         },
         {
-            "name": "Bifta",
-            "model": "bifta",
-            "price": 5000
-        },
-        {
             "name": "Bison",
             "model": "bison",
             "price": 5000
@@ -724,34 +1312,9 @@
             "price": 160000
         },
         {
-            "name": "Blazer Lifeguard",
-            "model": "blazer2",
-            "price": 1000
-        },
-        {
-            "name": "Blista",
-            "model": "blista",
-            "price": 42000
-        },
-        {
             "name": "Blista Compact",
             "model": "blista2",
             "price": 20000
-        },
-        {
-            "name": "Blista Kanjo",
-            "model": "kanjo",
-            "price": 35254822
-        },
-        {
-            "name": "Bobcat XL",
-            "model": "bobcatxl",
-            "price": 8000
-        },
-        {
-            "name": "Brawler",
-            "model": "brawler",
-            "price": 300000
         },
         {
             "name": "Brioso R/A",
@@ -764,11 +1327,6 @@
             "price": 29000
         },
         {
-            "name": "Buccaneer Custom",
-            "model": "buccaneer2",
-            "price": 55000
-        },
-        {
             "name": "Caracara 4x4",
             "model": "caracara2",
             "price": 50000000
@@ -777,11 +1335,6 @@
             "name": "Carbonizzare",
             "model": "carbonizzare",
             "price": 195000
-        },
-        {
-            "name": "Casco",
-            "model": "casco",
-            "price": 1380000
         },
         {
             "name": "Cavalcade",
@@ -794,54 +1347,9 @@
             "price": 60000
         },
         {
-            "name": "Cheburek",
-            "model": "cheburek",
-            "price": 1000000
-        },
-        {
             "name": "Cheetah Classic",
             "model": "cheetah2",
             "price": 1000000
-        },
-        {
-            "name": "Chino",
-            "model": "chino",
-            "price": 125000
-        },
-        {
-            "name": "Chino Custom",
-            "model": "chino2",
-            "price": 175000
-        },
-        {
-            "name": "Clique",
-            "model": "clique",
-            "price": 500000
-        },
-        {
-            "name": "Cognoscenti",
-            "model": "cognoscenti",
-            "price": 55000
-        },
-        {
-            "name": "Cognoscenti (Armored)",
-            "model": "cognoscenti2",
-            "price": 100000
-        },
-        {
-            "name": "Cognoscenti 55",
-            "model": "cog55",
-            "price": 55000
-        },
-        {
-            "name": "Cognoscenti Cabrio",
-            "model": "cogcabrio",
-            "price": 100000
-        },
-        {
-            "name": "Comet",
-            "model": "comet2",
-            "price": 140000
         },
         {
             "name": "Comet Retro Custom",
@@ -859,16 +1367,6 @@
             "price": 135000
         },
         {
-            "name": "Coquette BlackFin",
-            "model": "coquette3",
-            "price": 695000
-        },
-        {
-            "name": "Coquette Classic",
-            "model": "coquette2",
-            "price": 665000
-        },
-        {
             "name": "Deveste Eight",
             "model": "deveste",
             "price": 100000000
@@ -877,11 +1375,6 @@
             "name": "Deviant",
             "model": "deviant",
             "price": 450000
-        },
-        {
-            "name": "Dilettante",
-            "model": "dilettante",
-            "price": 39999
         },
         {
             "name": "Dominator",
@@ -899,21 +1392,6 @@
             "price": 120000
         },
         {
-            "name": "Dubsta 6x6",
-            "model": "dubsta3",
-            "price": 335000
-        },
-        {
-            "name": "Dukes",
-            "model": "dukes",
-            "price": 90000
-        },
-        {
-            "name": "Dune Buggy",
-            "model": "dune",
-            "price": 15000
-        },
-        {
             "name": "ETR1",
             "model": "sheava",
             "price": 1995000
@@ -924,34 +1402,9 @@
             "price": 100000
         },
         {
-            "name": "Emerus",
-            "model": "emerus",
-            "price": 56439209
-        },
-        {
-            "name": "Emperor",
-            "model": "emperor",
-            "price": 15000
-        },
-        {
-            "name": "Emperor",
-            "model": "emperor2",
-            "price": 5000
-        },
-        {
-            "name": "Entity XF",
-            "model": "entityxf",
-            "price": 795000
-        },
-        {
             "name": "Exemplar",
             "model": "exemplar",
             "price": 200000
-        },
-        {
-            "name": "Exoskeleton",
-            "model": "exoskeleton",
-            "price": 500000000
         },
         {
             "name": "FMJ",
@@ -959,79 +1412,9 @@
             "price": 1750000
         },
         {
-            "name": "FQ 2",
-            "model": "fq2",
-            "price": 110000
-        },
-        {
-            "name": "Faction",
-            "model": "faction",
-            "price": 36000
-        },
-        {
-            "name": "Faction Custom",
-            "model": "faction2",
-            "price": 55000
-        },
-        {
-            "name": "Faction Custom Donk",
-            "model": "faction3",
-            "price": 360000
-        },
-        {
-            "name": "Fagaloa",
-            "model": "fagaloa",
-            "price": 1000000
-        },
-        {
-            "name": "Felon",
-            "model": "felon",
-            "price": 90000
-        },
-        {
-            "name": "Furia",
-            "model": "furia",
-            "price": 51871643
-        },
-        {
-            "name": "Furore GT",
-            "model": "furoregt",
-            "price": 500000
-        },
-        {
-            "name": "Fusilade",
-            "model": "fusilade",
-            "price": 36000
-        },
-        {
             "name": "GB200",
             "model": "gb200",
             "price": 300000
-        },
-        {
-            "name": "GP1",
-            "model": "gp1",
-            "price": 1650000
-        },
-        {
-            "name": "GT500",
-            "model": "gt500",
-            "price": 1000000
-        },
-        {
-            "name": "Gang Burrito",
-            "model": "gburrito",
-            "price": 70000
-        },
-        {
-            "name": "Gauntlet",
-            "model": "gauntlet",
-            "price": 32000
-        },
-        {
-            "name": "Gauntlet Classic",
-            "model": "gauntlet3",
-            "price": 45000000
         },
         {
             "name": "Granger",
@@ -1044,39 +1427,14 @@
             "price": 45000
         },
         {
-            "name": "Guardian",
-            "model": "guardian",
-            "price": 20000
-        },
-        {
-            "name": "Habanero",
-            "model": "habanero",
-            "price": 30000
-        },
-        {
             "name": "Hellion",
             "model": "hellion",
             "price": 5000000
         },
         {
-            "name": "Hermes",
-            "model": "hermes",
-            "price": 200000
-        },
-        {
-            "name": "Hotknife",
-            "model": "hotknife",
-            "price": 90000
-        },
-        {
             "name": "Hustler",
             "model": "hustler",
             "price": 90000
-        },
-        {
-            "name": "Imorgon",
-            "model": "imorgon",
-            "price": 80070801
         },
         {
             "name": "Infernus",
@@ -1089,39 +1447,14 @@
             "price": 9000
         },
         {
-            "name": "Injection",
-            "model": "bfinjection",
-            "price": 15000
-        },
-        {
-            "name": "Insurgent Pick-Up Custom",
-            "model": "insurgent3",
-            "price": 2000000
-        },
-        {
             "name": "Intruder",
             "model": "intruder",
             "price": 16000
         },
         {
-            "name": "Issi",
-            "model": "issi2",
-            "price": 20000
-        },
-        {
-            "name": "Itali GTB Custom",
-            "model": "italigtb2",
-            "price": 1500000
-        },
-        {
             "name": "Itali GTO",
             "model": "italigto",
             "price": 700000
-        },
-        {
-            "name": "Jackal",
-            "model": "jackal",
-            "price": 65000
         },
         {
             "name": "Jester",
@@ -1139,29 +1472,14 @@
             "price": 20000000
         },
         {
-            "name": "Kalahari",
-            "model": "kalahari",
-            "price": 6000
-        },
-        {
             "name": "Kuruma",
             "model": "kuruma",
             "price": 95000
         },
         {
-            "name": "Liberator",
-            "model": "monster",
-            "price": 15000000
-        },
-        {
             "name": "Locust",
             "model": "locust",
             "price": 45495606
-        },
-        {
-            "name": "Lost Slamvan",
-            "model": "slamvan2",
-            "price": 30500
         },
         {
             "name": "Lynx",
@@ -1209,16 +1527,6 @@
             "price": 100000
         },
         {
-            "name": "Minivan",
-            "model": "minivan",
-            "price": 30000
-        },
-        {
-            "name": "Minivan Custom",
-            "model": "minivan2",
-            "price": 600000
-        },
-        {
             "name": "Monroe",
             "model": "monroe",
             "price": 500000
@@ -1229,49 +1537,14 @@
             "price": 300000
         },
         {
-            "name": "Nero Custom",
-            "model": "nero2",
-            "price": 2500000
-        },
-        {
             "name": "Nightshade",
             "model": "nightshade",
             "price": 585000
         },
         {
-            "name": "Novak",
-            "model": "novak",
-            "price": 10000000
-        },
-        {
-            "name": "Omnis",
-            "model": "omnis",
-            "price": 1700000
-        },
-        {
-            "name": "Oppressor Mk II",
-            "model": "oppressor2",
-            "price": 100000000000
-        },
-        {
-            "name": "Oracle",
-            "model": "oracle2",
-            "price": 75000
-        },
-        {
-            "name": "Oracle XS",
-            "model": "oracle",
-            "price": 60000
-        },
-        {
             "name": "Osiris",
             "model": "osiris",
             "price": 1950000
-        },
-        {
-            "name": "Outlaw",
-            "model": "outlaw",
-            "price": 64348145
         },
         {
             "name": "Panto",
@@ -1282,16 +1555,6 @@
             "name": "Pariah",
             "model": "pariah",
             "price": 400000
-        },
-        {
-            "name": "Patriot",
-            "model": "patriot",
-            "price": 65000
-        },
-        {
-            "name": "Patriot Stretch",
-            "model": "patriot2",
-            "price": 500000
         },
         {
             "name": "Penetrator",
@@ -1314,21 +1577,6 @@
             "price": 40000
         },
         {
-            "name": "Prairie",
-            "model": "prairie",
-            "price": 15000
-        },
-        {
-            "name": "Primo",
-            "model": "primo",
-            "price": 9000
-        },
-        {
-            "name": "Raiden",
-            "model": "raiden",
-            "price": 450000
-        },
-        {
             "name": "Rancher XL",
             "model": "rancherxl",
             "price": 35000
@@ -1342,11 +1590,6 @@
             "name": "Rapid GT",
             "model": "rapidgt2",
             "price": 150000
-        },
-        {
-            "name": "Rapid GT Classic",
-            "model": "rapidgt3",
-            "price": 120000
         },
         {
             "name": "Rat-Loader",
@@ -1384,11 +1627,6 @@
             "price": 600000
         },
         {
-            "name": "Rocoto",
-            "model": "rocoto",
-            "price": 85000
-        },
-        {
             "name": "Roosevelt Valor",
             "model": "btype3",
             "price": 2100000
@@ -1397,11 +1635,6 @@
             "name": "Ruiner",
             "model": "ruiner",
             "price": 10000
-        },
-        {
-            "name": "Rumpo Customer",
-            "model": "rumpo3",
-            "price": 15000
         },
         {
             "name": "Ruston",
@@ -1414,39 +1647,9 @@
             "price": 2200000
         },
         {
-            "name": "Sabre Turbo",
-            "model": "sabregt",
-            "price": 45000
-        },
-        {
-            "name": "Savestra",
-            "model": "savestra",
-            "price": 150000
-        },
-        {
-            "name": "Schafter LWB (Armored)",
-            "model": "schafter6",
-            "price": 280000
-        },
-        {
-            "name": "Schafter V12",
-            "model": "schafter3",
-            "price": 140000
-        },
-        {
-            "name": "Schafter V12 (Armored)",
-            "model": "schafter5",
-            "price": 270000
-        },
-        {
             "name": "Schlagen GT",
             "model": "schlagen",
             "price": 1000000
-        },
-        {
-            "name": "Schwartzer",
-            "model": "schwarzer",
-            "price": 100000
         },
         {
             "name": "Seminole",
@@ -1454,19 +1657,9 @@
             "price": 30000
         },
         {
-            "name": "Sentinel Classic",
-            "model": "sentinel3",
-            "price": 250000
-        },
-        {
             "name": "Serrano",
             "model": "serrano",
             "price": 35000
-        },
-        {
-            "name": "Slamvan",
-            "model": "slamvan",
-            "price": 30000
         },
         {
             "name": "Slamvan Custom",
@@ -1474,19 +1667,9 @@
             "price": 650000
         },
         {
-            "name": "Space Docker",
-            "model": "dune2",
-            "price": 0
-        },
-        {
             "name": "Specter Custom",
             "model": "specter2",
             "price": 1250000
-        },
-        {
-            "name": "Speedo",
-            "model": "speedo",
-            "price": 20000
         },
         {
             "name": "Stallion",
@@ -1494,34 +1677,9 @@
             "price": 35000
         },
         {
-            "name": "Stinger",
-            "model": "stinger",
-            "price": 850000
-        },
-        {
-            "name": "Stinger GT",
-            "model": "stingergt",
-            "price": 890000
-        },
-        {
             "name": "Streiter",
             "model": "streiter",
             "price": 100000
-        },
-        {
-            "name": "Stretch",
-            "model": "stretch",
-            "price": 30000
-        },
-        {
-            "name": "Sugoi",
-            "model": "sugoi",
-            "price": 83422852
-        },
-        {
-            "name": "Sultan",
-            "model": "sultan",
-            "price": 25000
         },
         {
             "name": "Super Diamond",
@@ -1534,29 +1692,9 @@
             "price": 120000
         },
         {
-            "name": "Surfer",
-            "model": "surfer2",
-            "price": 5000
-        },
-        {
-            "name": "Surge",
-            "model": "surge",
-            "price": 38000
-        },
-        {
             "name": "T20",
             "model": "t20",
             "price": 2200000
-        },
-        {
-            "name": "Tailgater",
-            "model": "tailgater",
-            "price": 55000
-        },
-        {
-            "name": "Taipan",
-            "model": "taipan",
-            "price": 3100000
         },
         {
             "name": "Tampa",
@@ -1564,19 +1702,9 @@
             "price": 100000
         },
         {
-            "name": "Tezeract",
-            "model": "tezeract",
-            "price": 3200000
-        },
-        {
             "name": "Thrax",
             "model": "thrax",
             "price": 1000000000
-        },
-        {
-            "name": "Tornado",
-            "model": "tornado",
-            "price": 45000
         },
         {
             "name": "Tornado",
@@ -1594,24 +1722,9 @@
             "price": 65000
         },
         {
-            "name": "Trophy Truck",
-            "model": "trophytruck",
-            "price": 2000000
-        },
-        {
             "name": "Tropos Rallye",
             "model": "tropos",
             "price": 1816000
-        },
-        {
-            "name": "Tulip",
-            "model": "tulip",
-            "price": 350000
-        },
-        {
-            "name": "Turismo R",
-            "model": "turismor",
-            "price": 500000
         },
         {
             "name": "Tyrant",
@@ -1644,29 +1757,9 @@
             "price": 50000
         },
         {
-            "name": "Virgo Classic",
-            "model": "virgo3",
-            "price": 75000
-        },
-        {
-            "name": "Virgo Classic Custom",
-            "model": "virgo2",
-            "price": 175000
-        },
-        {
             "name": "Visione",
             "model": "visione",
             "price": 2500000
-        },
-        {
-            "name": "Voltic",
-            "model": "voltic",
-            "price": 170000
-        },
-        {
-            "name": "Voodoo",
-            "model": "voodoo2",
-            "price": 4000
         },
         {
             "name": "Washington",
@@ -1684,19 +1777,9 @@
             "price": 800000
         },
         {
-            "name": "Youga Classic",
-            "model": "youga2",
-            "price": 10000
-        },
-        {
             "name": "Zentorno",
             "model": "zentorno",
             "price": 1225000
-        },
-        {
-            "name": "Zhaba",
-            "model": "zhaba",
-            "price": 8184082032
         },
         {
             "name": "Zion",
