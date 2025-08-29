@@ -671,10 +671,6 @@
                         item.classList.remove('owned');
                     }
                 });
-                // Refresh the class headers with updated counters after highlighting
-                if (originalVehicleData && Object.keys(originalVehicleData).length > 0) {
-                    displayVehicleClasses(originalVehicleData);
-                }
             }
 
             async function highlightAvailableVehiclesInModal() {
@@ -698,12 +694,6 @@
                             item.style.border = '2px solid #4CAF50';
                         }
                     });
-
-                    // Refresh the class headers with updated counters
-                    if (originalVehicleData && Object.keys(originalVehicleData).length > 0) {
-                        displayVehicleClasses(originalVehicleData);
-                    }
-
                 } catch (err) {
                     console.error('Error highlighting vehicles in modal:', err);
                     // Don't show error to user since this is just visual enhancement
@@ -725,9 +715,6 @@
             // Store original vehicle data for filtering
             let originalVehicleData = {};
 
-            // Flag to prevent infinite loops when updating counters
-            let isUpdatingCounters = false;
-
             // Vehicle modal functionality
             async function loadVehicleClasses() {
                 try {
@@ -741,9 +728,6 @@
             }
 
             function displayVehicleClasses(vehicles) {
-                // Prevent infinite loops
-                if (isUpdatingCounters) return;
-                isUpdatingCounters = true;
                 const vehicleClassesDiv = document.getElementById('vehicleClasses');
                 vehicleClassesDiv.innerHTML = ''; // Clear existing content
                 
@@ -751,38 +735,13 @@
                     // Skip empty classes
                     if (vehicleList.length === 0) continue;
                     
-                    // Count owned vehicles in this class
-                    const ownedCount = vehicleList.filter(vehicle => ownedVehicles.has(vehicle.model)).length;
-                    
-                    // Count vehicles available in dealership (from cached API data)
-                    let dealershipCount = 0;
-                    if (cachedApiData) {
-                        dealershipCount = vehicleList.filter(vehicle => {
-                            return Object.values(cachedApiData).some(category =>
-                                category.some(car => car.model === vehicle.model)
-                            );
-                        }).length;
-                    }
-                    
                     const classDiv = document.createElement('div');
                     classDiv.className = 'vehicle-class';
                     
                     const header = document.createElement('div');
                     header.className = 'class-header';
-                    
-                    // Create the header with counters
-                    const countersHtml = `
-                        <span style="font-size: 12px; color: var(--text-color); opacity: 0.8; margin-left: 10px;">
-                            <span style="color: #2196F3;">Owned: ${ownedCount}</span> | 
-                            <span style="color: #4CAF50;">Available: ${dealershipCount}</span>
-                        </span>
-                    `;
-                    
                     header.innerHTML = `
-                        <div style="display: flex; align-items: center; flex-wrap: wrap;">
-                            <h3 style="margin: 0;">${className} (${vehicleList.length})</h3>
-                            ${countersHtml}
-                        </div>
+                        <h3>${className} (${vehicleList.length})</h3>
                         <span>▼</span>
                     `;
                     
@@ -836,9 +795,6 @@
                 // Highlight both available and owned vehicles
                 highlightAvailableVehiclesInModal();
                 highlightOwnedVehiclesInModal();
-
-                // Reset the flag to allow future updates
-                isUpdatingCounters = false;
             }
 
             function filterVehicles() {
